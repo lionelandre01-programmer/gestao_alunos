@@ -1,0 +1,23 @@
+{% extends 'aluno/layout/base.html' %}
+
+{% block content %}
+
+    <div class="page">
+        <h1 style="color: aquamarine;">ACTUALIZAÇÃO DE ALUNO</h1>
+    </div>
+
+    <form action="{% url 'actualizar' form.instance.id %}" method="post" class="form" style="height: 85vh;">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <div class="btn-edite">
+            <button type="submit" id="btn-actua" style="background: yellow;">Actualizar</button>
+            <button id="btn-actua" style="background: gainsboro;">
+                <a href="{% url 'lista' %}" style="color: black;">Voltar</a>
+            </button>
+        </div>
+
+    </form>
+
+{% endblock %}

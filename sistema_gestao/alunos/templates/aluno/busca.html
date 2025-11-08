@@ -1,0 +1,53 @@
+{% extends 'aluno/layout/base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<form action="{% url 'busca' %}" method="post">
+
+    {% csrf_token %}
+    <label for="busca">Aluno:</label>
+    <input type="text" name="busca" placeholder="Nome ou Id" required>
+    <button type="submit">Buscar</button>
+
+</form>
+
+{% if aluno %}
+
+    <div class="page">
+        <h1 style="color: aquamarine;">INFORMAÇÕES DO ALUNO</h1>
+    </div>
+
+    <div class="detalhes">
+        <div class="foto">
+            <img src="{% static 'css/img/Passe.png' %}" alt="erro" class="passe">
+        </div>
+
+        <div class="informa">
+            <h4>Nome: <span>{{ aluno.nome }}</span></h4>
+            <h4>Gênero: <span>{{ aluno.genero }}</span></h4>
+            <h4>Número: <span>{{ aluno.numero }}</span></h4>
+            <h4>Classe: <span>{{ aluno.classe }}ª</span></h4>
+            <h4>Sala: <span>{{ aluno.sala }}</span></h4>
+            <h4>Turno: <span>{{ aluno.turno }}</span></h4>
+            <h4>Curso: <span>{{ aluno.curso }}</span></h4>
+            <h4>Data De Nascimento: <span>{{ aluno.data_nascimento | date:'d/m/Y'}}</span></h4>
+            <h4>Data De Inscrição: <span>{{ aluno.ingresso | date:'d/m/Y h:i'}}</span></h4>
+        </div>
+
+        <button style="background: gainsboro; width: 50%; height: 10%;
+         border: 2px solid aliceblue; border-radius: 10px; background: goldenrod;">
+            <a href="{% url 'lista' %}" style="color: black;">Voltar</a>
+        </button>
+    </div>
+
+{% else %}
+
+    <div style="width: 80%; height: 50px; background: red;">
+        <h1>Aluno não encontrado</h1>
+    </div>
+
+{% endif %}
+
+{% endblock %}

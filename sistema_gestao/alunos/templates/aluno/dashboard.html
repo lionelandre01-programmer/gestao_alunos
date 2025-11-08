@@ -1,0 +1,66 @@
+{% extends 'aluno/layout/base.html' %}
+
+{% block content %}
+
+<div class="totals">
+    <div class="totalgreen">
+        <h1>Total De Alunos</h1>
+        <h2>{{ total }}</h2>
+    </div>
+
+    <div class="totalyellow">
+        <h1>Total de Masculinos</h1>
+        <h2>{{ totalM }}</h2>
+    </div>
+
+    <div class="totalred">
+        <h1>Total de Femininos</h1>
+        <h2>{{ totalF }}</h2>
+    </div>
+</div>
+
+<div class="div">
+
+    <div class="totalcurso">
+        <h2>Total Em Enfermagem</h2>
+        <h2>{{ totalEnfe }}</h2>
+    </div>
+
+    <div class="totalcurso">
+        <h2>Total Em Contabilidade</h2>
+        <h2>{{ totalCont }}</h2>
+    </div>
+
+    <div class="totalcurso">
+        <h2>Total Em Programação</h2>
+        <h2>{{ totalProg }}</h2>
+    </div>
+
+    <div class="totalcurso">
+        <h2>Total Em Electricidade</h2>
+        <h2>{{ totalElec }}</h2>
+    </div>
+
+    <div class="totalcurso">
+        <h2>Total Em Gestão Empresarial</h2>
+        <h2>{{ totalGE }}</h2>
+    </div>
+
+    <div class="totalcurso">
+        <h2>Total Em Informática</h2>
+        <h2>{{ totalInfo }}</h2>
+    </div>
+
+    <div class="totalcurso">
+        <h2>Total Turno Manhã</h2>
+        <h2>{{ totalMa }}</h2>
+    </div>
+
+    <div class="totalcurso">
+        <h2>Total Turno Tarde</h2>
+        <h2>{{ totalTa }}</h2>
+    </div>
+
+</div>
+
+{% endblock %}

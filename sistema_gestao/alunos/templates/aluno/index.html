@@ -1,0 +1,24 @@
+{% extends 'aluno/layout/base.html' %}
+
+{% block content %}
+
+    <div class="page">
+        <h1 style="color: aquamarine;">CADASTRO DE ALUNO</h1>
+    </div>
+
+    <form action="{% url 'novo_aluno' %}" method="post" class="form" style="height: 90vh;">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <div class="btn-cadastra">
+            <button type="submit" id="btn-cada" style="background: rgb(0, 174, 255);">Cadastrar</button>
+            <button type="reset" id="btn-cada" style="background: rgb(233, 48, 42);">Limpar</button>
+            <button id="btn-cada" style="background: gainsboro;">
+                <a href="{% url 'lista' %}" style="color: black;">Voltar</a>
+            </button>
+        </div>
+
+    </form>
+
+{% endblock %}

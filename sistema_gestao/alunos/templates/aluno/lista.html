@@ -1,0 +1,58 @@
+{% extends 'aluno/layout/base.html' %}
+
+{% block content %}
+
+<button class="btn-back">
+    <a href="{% url 'index' %}" style="color: aliceblue;">Novo Aluno</a>
+</button>
+
+
+<table>
+
+
+    <tr>
+        <th>Id</th>
+        <th>Nome</th>
+        <th>Classe</th>
+        <th>Curso</th>
+        <th>Sala</th>
+        <th>Acções</th>
+    </tr>
+
+{% for alunos in aluno %}
+
+    <tr>
+
+        <td>{{ alunos.id }}</td>
+        <td>{{ alunos.nome }}</td>
+        <td>{{ alunos.classe }}ª</td>
+        <td>{{ alunos.curso }}</td>
+        <td>{{ alunos.sala }}</td>
+        <td style="display: flex; justify-content: space-evenly;">
+            <button class="btn-action" style="background-color: aqua;">
+                <a href="{% url 'mostrar' alunos.id %}" style="color: black;">Ver</a>
+            </button>
+
+            <button class="btn-action" style="background-color: yellow;">
+                <a href="{% url 'edite' alunos.id %}" style="color: black;">Editar</a>
+            </button>
+
+            <button class="btn-action" style="background-color: red;">
+                <a href="{% url 'delete' alunos.id %}" style="color: black;">Eliminar</a>
+            </button>
+        </td>
+
+    </tr>
+
+
+{% empty %}
+
+    <h3>Lista Vazia</h3>
+
+{% endfor %}
+
+</table>
+
+
+
+{% endblock %}
