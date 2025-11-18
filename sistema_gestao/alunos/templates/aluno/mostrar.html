@@ -16,7 +16,6 @@
         <div class="informa">
             <h4>Nome: <span>{{ aluno.nome }}</span></h4>
             <h4>Gênero: <span>{{ aluno.genero }}</span></h4>
-            <h4>Número: <span>{{ aluno.numero }}</span></h4>
             <h4>Classe: <span>{{ aluno.classe }}ª</span></h4>
             <h4>Sala: <span>{{ aluno.sala }}</span></h4>
             <h4>Turno: <span>{{ aluno.turno }}</span></h4>
@@ -25,10 +24,17 @@
             <h4>Data De Inscrição: <span>{{ aluno.ingresso | date:'d/m/Y h:i'}}</span></h4>
         </div>
 
-        <button style="background: gainsboro; width: 50%; height: 10%;
+        <div style="display: flex; justify-content: space-evenly; height: 10%; width: 100%;">
+            <button style="background: gainsboro; width: 40%; height: 100%;
          border: 2px solid aliceblue; border-radius: 10px; background: goldenrod;">
             <a href="{% url 'lista' %}" style="color: black;">Voltar</a>
         </button>
+
+        <button style="background: gainsboro; width: 40%; height: 100%;
+         border: 2px solid aliceblue; border-radius: 10px; background: rgb(32, 97, 218);">
+            <a href="{% url 'pagas' aluno.id %}" style="color: black;">Meses Pagos</a>
+        </button>
+        </div>
     </div>
 
     

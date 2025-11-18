@@ -1,0 +1,117 @@
+{% extends 'aluno/layout/base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<form action="{% url 'turma' %}" method="post" style="width: 48%; display: flex; gap: 10px; align-items: center; background-color: rgb(90, 89, 89); padding: 15px; border-radius: 10px;">
+
+    {% csrf_token %}
+    <div style="width: 25%; height: 100%; display: flex; flex-direction: column; gap: 25px;">
+        <label for="classe">Classe:</label>
+        <label for="turma">Turma:</label>
+        <label for="turno">Turno:</label>
+    </div>
+
+    <div style="width: 40%; height: 100%; display: flex; flex-direction: column; gap: 10px;">
+        <select name="classe" style="height: 30px; border-radius: 5px;">
+            <option value="10">10ª Classe</option>
+            <option value="11">11ª Classe</option>
+            <option value="12">12ª Classe</option>
+            <option value="13">13ª Classe</option>
+        </select>
+
+        <select name="turma" style="height: 30px; border-radius: 5px;">
+            <option value="A">Turma A</option>
+            <option value="B">Turma B</option>
+            <option value="C">Turma C</option>
+            <option value="D">Turma D</option>
+        </select>
+
+        <select name="turno" style="height: 30px; border-radius: 5px;">
+            <option value="Manhã">Turno da manhã</option>
+            <option value="Tarde">Turno da tarde</option>
+        </select>
+    </div>
+    
+    <button type="submit" style="width: 30%; height: 70px; background: rgb(0, 132, 255); 
+    border: 1px solid black; border-radius: 5px;"><h1>Buscar</h1></button>
+
+</form>
+
+{% if todos %}
+
+    <div class="page">
+        <h1 style="color: aquamarine;">RESULTADO DA BUSCA</h1>
+    </div>
+
+    <table>
+
+
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Classe</th>
+            <th>Curso</th>
+            <th>Sala</th>
+            <th>Acções</th>
+        </tr>
+
+    {% for alunos in todos %}
+
+        <tr>
+
+            <td>{{ alunos.id }}</td>
+            <td>{{ alunos.nome }}</td>
+            <td>{{ alunos.classe }}ª</td>
+            <td>{{ alunos.curso }}</td>
+            <td>{{ alunos.sala }}</td>
+            <td style="display: flex; justify-content: space-evenly;">
+                <button class="btn-action" style="background-color: aqua;">
+                    <a href="{% url 'mostrar' alunos.id %}" style="color: black;">Ver</a>
+                </button>
+
+                <button class="btn-action" style="background-color: yellow;">
+                    <a href="{% url 'edite' alunos.id %}" style="color: black;">Editar</a>
+                </button>
+
+                <button class="btn-action" style="background-color: red;">
+                    <a href="{% url 'delete' alunos.id %}" style="color: black;">Eliminar</a>
+                </button>
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </table>
+
+{% else %}
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if 'error' in message.tags %}
+
+                <div style="width: 50%; height: auto; background-color: rgb(253, 27, 27); margin: 20px; border-radius: 10px; padding: 20px;">
+                    <h1 style="text-align: center;">{{ message }}</h1>
+                </div>
+
+            {% elif 'success' in message.tags %}
+
+                <div style="width: 50%; height: auto; background-color: rgb(4, 250, 98); margin: 20px; border-radius: 10px; padding: 20px;">
+                    <h1 style="text-align: center;">{{ message }}</h1>
+                </div>
+
+            {% else %}
+
+                <div style="width: 50%; height: auto; background-color: rgb(246, 250, 4); margin: 20px; border-radius: 10px; padding: 20px;">
+                    <h1 style="text-align: center;">{{ message }}</h1>
+                </div>
+            
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+{% endif %}
+
+{% endblock %}

@@ -2,6 +2,7 @@
 
 {% block content %}
 
+{% if total %}
 <div class="totals">
     <div class="totalgreen">
         <h1>Total De Alunos</h1>
@@ -62,5 +63,10 @@
     </div>
 
 </div>
+{% else %}
+
+<h1>Erro!</h1>
+
+{%endif%}
 
 {% endblock %}

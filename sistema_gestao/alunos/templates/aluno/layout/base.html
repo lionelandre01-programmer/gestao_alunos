@@ -17,7 +17,8 @@
                 <li><a href="{% url 'dashboard' %}">DashBoard</a></li>
                 <li><a href="{% url 'abaBusca' %}">Pesquisar</a></li>
                 <li><a href="{% url 'lista' %}">Alunos</a></li>
-                <li><a href="#">Login</a></li>
+                <li><a href="{% url 'registro' %}">Sign Up</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
             </ul>
         </nav>
     </header>
@@ -28,5 +29,6 @@
     {% endblock %}
     </main>
 
+    <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

@@ -152,6 +152,17 @@ th{
     border-radius: 8px;
 }
 
+.btn-backen{
+    width: 20%;
+    height: 40px;
+    background: gray;
+    top: 20vh;
+    left: 20px;
+    position: absolute;
+    border: 2px solid black;
+    border-radius: 8px;
+}
+
 .btn-action{
     width: 30%;
     height: auto;
