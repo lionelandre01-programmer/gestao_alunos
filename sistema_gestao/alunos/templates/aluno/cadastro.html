@@ -26,13 +26,13 @@
     {% endfor %}
 {% endif %}
 
-    <div class="page" id="div-pretende">
+    <div class="page" id="div-pretende" style="margin-top: 40px;">
         <h1 style="color: aquamarine;">CADASTRO DE ALUNO</h1>
     </div>
 
-    <div style="height: auto; width: 100vw; display: flex; justify-content: space-evenly; align-items: center;">
+    <div style="height: auto; width: 83vw; display: flex; justify-content: space-evenly; align-items: center;">
 
-        {% if aluno %}
+    {% if aluno %}
 
         <div style="background-color: rgb(0, 140, 255); padding: 20px; border-radius: 10px;" id="div-pretende">
             <h1>Pretende realizar o pagamento de propina?</h1>
@@ -46,7 +46,7 @@
             </div>
         </div>
         
-        {% else %}
+    {% else %}
 
         <form action="{% url 'novo_aluno' %}" method="post" class="form" style="height: 100vh;">
             {% csrf_token %}
@@ -70,7 +70,7 @@
             </div>
 
         </form>
-        {% endif %}
+    {% endif %}
 
     </div>
 

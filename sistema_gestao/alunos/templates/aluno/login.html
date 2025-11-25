@@ -6,15 +6,15 @@
         <h1 style="color: aquamarine;">FAZER LOGIN</h1>
     </div>
 
-    <form action="{% url 'login.post' %}" method="post" class="form" style="height: 85vh;">
+    <form action="{% url 'login.post' %}" method="post" class="form" style="height: 35vh;">
         {% csrf_token %}
 
         {{ form.as_p }}
 
-        <div class="btn-edite">
+        <div class="btn-edite" style="height: 40%;">
             <button type="submit" id="btn-actua" style="background: yellow;">Entrar</button>
             <button id="btn-actua" style="background: gainsboro;">
-                <a href="{% url 'lista' %}" style="color: black;">Voltar</a>
+                <a href="{% url 'index' %}" style="color: black;">Voltar</a>
             </button>
         </div>
 

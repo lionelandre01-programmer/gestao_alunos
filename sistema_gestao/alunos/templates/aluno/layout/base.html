@@ -8,27 +8,47 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    
+    <div class="grid">
         <header>
-        <h1>LIONANDRE LEARNING</h1>
-        <nav>
-            <ul class="lista">
-                
-                <li><a href="{% url 'dashboard' %}">DashBoard</a></li>
-                <li><a href="{% url 'abaBusca' %}">Pesquisar</a></li>
-                <li><a href="{% url 'lista' %}">Alunos</a></li>
-                <li><a href="{% url 'registro' %}">Sign Up</a></li>
-                <li><a href="{% url 'login' %}">Login</a></li>
+            <h1>LIONANDRE LEARNING</h1>
+            <nav>
+                <ul class="lista">
+                    {% if request.user.is_authenticated %}
+                    <button onclick="return confirm('Deseja Sair?')" 
+                    style="height: 25px; width: 75px; display: flex; justify-content: space-evenly; align-items: center; border-radius: 5px;">
+                        <li><a href="{% url 'logout' %}" style="color: black;">Logout</a></li></button>
+                    {% else %}
+                    <li><a href="{% url 'registro' %}">Sign Up</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
+
+        <aside>
+            {% if request.user.is_authenticated %}
+            <ul class="aside-lista">
+                <button><li><a href="{% url 'index' %}">Inicio</a></li></button>
+                <button><li><a href="{% url 'dashboard' %}">DashBoard</a></li></button>
+                <button><li><a href="{% url 'abaBusca' %}">Pesquisar</a></li></button>
+                <button><li><a href="{% url 'lista' %}">Alunos</a></li></button>
+                <button><li><a href="{% url 'mensalidade' %}">Mensalidade</a></li></button>
+                <button><li><a href="{% url 'movimento' %}">Movimentos</a></li></button>
+                <button><li><a href="{% url 'disciplina' %}">Disciplinas</a></li></button>
+                <button><li><a href="{% url 'professor' %}">Professores</a></li></button>
+                <button><li><a href="{% url 'nota' %}">Notas</a></li></button>
             </ul>
-        </nav>
-    </header>
-    
-    <main>
-    {% block content %}
+            {% endif %}
+        </aside>
 
-    {% endblock %}
-    </main>
+        <main>
+        
+        {% block content %}
 
+        {% endblock %}
+        
+        </main>
+    </div>
     <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

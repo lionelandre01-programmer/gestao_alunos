@@ -1,0 +1,70 @@
+{% extends 'aluno/layout/base.html' %}
+
+{% block content %}
+
+{% if erros %}
+
+    {% for campo, erro in erros.items %}
+        <div style="width: 50%; height: auto; background-color: rgb(253, 27, 27); margin: 20px; border-radius: 10px; padding: 20px;">
+            <h4 style="text-align: center;">{{ campo }}: {{ erro }}</h4>
+        </div>
+    {% endfor %}
+            
+{% endif %}
+
+    <div class="page">
+        <h1 style="color: aquamarine;">CADASTRO DE NOTAS</h1>
+    </div>
+
+    <form action="{% url 'nota.post' %}" method="post" class="form" style="height: 90vh; gap: 5px;">
+        {% csrf_token %}
+
+        <label for="prof">Professor</label>
+        <select name="professor" id="prof" style="height: 10%; border-radius: 5px;" class="genero">
+            {% for professor in professores %}
+            <option value="{{ professor.id }}">{{ professor.nome }} {{ professor.sobrenome }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="aluno">Aluno</label>
+        <select name="aluno" id="aluno" style="height: 10%; border-radius: 5px;" class="genero">
+            {% for aluno in alunos %}
+            <option value="{{ aluno.id }}">{{ aluno.nome }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="dis">Disciplina</label>
+        <select name="disciplina" id="dis" style="height: 10%; border-radius: 5px;" class="genero">
+            {% for disciplina in disciplinas %}
+            <option value="{{ disciplina.id }}">{{ disciplina.nome }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="trim">Trimestre</label>
+        <select name="trimestre" id="trim" style="height: 10%; border-radius: 5px;" class="genero">
+            <option value="1º">Primeiro Trimestre</option>
+            <option value="2º">Segundo Trimestre</option>
+            <option value="3º">Terceiro Trimestre</option>
+        </select>
+
+        <label for="prova">Prova</label>
+        <select name="prova" id="prova" style="height: 10%; border-radius: 5px;" class="genero">
+            <option value="Avalição">Avaliação Contínua</option>
+            <option value="Prova do Professor">Prova do Professor</option>
+            <option value="Prova Trimestral">Prova do Trimestre</option>
+        </select>
+
+        <label for="nota">Nota</label>
+        <input type="number" name="nota" id="nota" placeholder="A nota do aluno" required class="genero" style="height: 10%; border-radius: 5px;">
+
+        <div class="btn-cadastra">
+            <button type="submit" id="btn-cada" class="btn-pretende" style="background: rgb(0, 174, 255);">Cadastrar</button>
+            <button type="reset" id="btn-cada" style="background: rgb(233, 48, 42);">Limpar</button>
+            <button id="btn-cada" style="background: gainsboro;">
+                <a href="{% url 'lista' %}" style="color: black;">Voltar</a>
+            </button>
+        </div>
+
+    </form>
+
+{% endblock %}

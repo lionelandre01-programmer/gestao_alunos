@@ -28,7 +28,37 @@
     {% endfor %}
 {% endif %}
 
-<button class="btn-backen">
+{% if aluno %}
+
+    <div class="page" style="margin-top: 20px;">
+        <h1 style="color: aquamarine;">INFORMAÇÕES DO ALUNO</h1>
+    </div>
+
+    <div class="detalhes">
+        <div class="foto">
+            <img src="{% static 'css/img/Passe.png' %}" alt="erro" class="passe">
+        </div>
+
+        <div class="informa">
+            <h4>Nome: <span>{{ aluno.nome }}</span></h4>
+            <h4>Gênero: <span>{{ aluno.genero }}</span></h4>
+            <h4>Classe: <span>{{ aluno.classe }}ª</span></h4>
+            <h4>Sala: <span>{{ aluno.sala }}</span></h4>
+            <h4>Turno: <span>{{ aluno.turno }}</span></h4>
+            <h4>Curso: <span>{{ aluno.curso }}</span></h4>
+            <h4>Data De Nascimento: <span>{{ aluno.data_nascimento | date:'d/m/Y'}}</span></h4>
+            <h4>Data De Inscrição: <span>{{ aluno.matricula | date:'d/m/Y h:i'}}</span></h4>
+        </div>
+
+        <button style="background: gainsboro; width: 50%; height: 10%;
+         border: 2px solid aliceblue; border-radius: 10px; background: rgb(0, 162, 255);">
+            <a href="{% url 'propina' aluno.id %}" style="color: black;">Pagamento</a>
+        </button>
+    </div>
+
+{% else %}
+
+<button class="btn-backen" style="margin-bottom: 20px;">
     <a href="{% url 'abaTurma' %}" style="color: black;">Busca por turmas</a>
 </button>
 
@@ -49,35 +79,6 @@
     border: 1px solid black; border-radius: 5px;"><h1>Buscar</h1></button>
 
 </form>
-
-{% if aluno %}
-
-    <div class="page" style="margin-top: 20px;">
-        <h1 style="color: aquamarine;">INFORMAÇÕES DO ALUNO</h1>
-    </div>
-
-    <div class="detalhes">
-        <div class="foto">
-            <img src="{% static 'css/img/Passe.png' %}" alt="erro" class="passe">
-        </div>
-
-        <div class="informa">
-            <h4>Nome: <span>{{ aluno.nome }}</span></h4>
-            <h4>Gênero: <span>{{ aluno.genero }}</span></h4>
-            <h4>Classe: <span>{{ aluno.classe }}ª</span></h4>
-            <h4>Sala: <span>{{ aluno.sala }}</span></h4>
-            <h4>Turno: <span>{{ aluno.turno }}</span></h4>
-            <h4>Curso: <span>{{ aluno.curso }}</span></h4>
-            <h4>Data De Nascimento: <span>{{ aluno.data_nascimento | date:'d/m/Y'}}</span></h4>
-            <h4>Data De Inscrição: <span>{{ aluno.ingresso | date:'d/m/Y h:i'}}</span></h4>
-        </div>
-
-        <button style="background: gainsboro; width: 50%; height: 10%;
-         border: 2px solid aliceblue; border-radius: 10px; background: rgb(0, 162, 255);">
-            <a href="{% url 'propina' aluno.id %}" style="color: black;">Pagamento</a>
-        </button>
-    </div>
-
 {% endif %}
 
 {% endblock %}

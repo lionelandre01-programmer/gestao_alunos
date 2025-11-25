@@ -1,0 +1,44 @@
+{% extends 'aluno/layout/base.html' %}
+
+{% block content %}
+
+<div class="page" style="width: auto; align-self: start; margin: 20px;">
+        <h1 style="color: aquamarine;">MOVIMENTOS NO SISTEMA</h1>
+</div>
+
+
+<table>
+
+
+    <tr>
+        <th>Id</th>
+        <th>Movimento</th>
+        <th>Aluno</th>
+        <th>Responsável</th>
+        <th>Data do movimento</th>
+    </tr>
+
+{% for movimento in movimentos %}
+
+    <tr>
+
+        <td>{{ movimento.id }}</td>
+        <td>{{ movimento.tipo }}</td>
+        <td>{{ movimento.Aluno }}</td>
+        <td>{{ movimento.funcionario }}</td>
+        <td>{{ movimento.data_movimento | date:'d/m/Y h:i' }}</td>
+
+    </tr>
+
+
+{% empty %}
+
+    <h3>Lista Vazia</h3>
+
+{% endfor %}
+
+</table>
+
+
+
+{% endblock %}

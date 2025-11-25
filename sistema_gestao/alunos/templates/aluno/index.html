@@ -26,8 +26,9 @@
     {% endfor %}
 {% endif %}
 
+{% if request.user.is_authenticated %}
 <div class="form" style="height: 50vh;">
-    <h1>Ola!</h1>
+    <h1>Ola {{ request.user.nome }}!</h1>
     <h2>No que podemos ajudá-lo?</h2>
 
     <div class="btn-cadastra" class="criar" style="height: 30%;">
@@ -57,6 +58,14 @@
 
     </div>
 </div>
+
+{% else %}
+<div class="form" style="height: 30vh;">
+    <h1>Faça login para ter acesso aos diversos recursos que o sistema oferece
+         para a optimização dos seus serviços!</h1>
+
+</div>
+{% endif %}
 
 
 

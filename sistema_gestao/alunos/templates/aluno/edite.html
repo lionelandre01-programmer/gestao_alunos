@@ -6,7 +6,7 @@
         <h1 style="color: aquamarine;">ACTUALIZAÇÃO DE ALUNO</h1>
     </div>
 
-    <form action="{% url 'actualizar' form.instance.id %}" method="post" class="form" style="height: 85vh;">
+    <form action="{% url 'actualizar' form.instance.id %}" method="post" class="form" style="height: 90vh;">
         {% csrf_token %}
 
         {{ form.as_p }}

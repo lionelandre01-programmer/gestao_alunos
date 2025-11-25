@@ -2,19 +2,42 @@
 
 {% block content %}
 
+{% if erros %}
+
+    {% for campo, erro in erros.items %}
+        <div style="width: 50%; height: auto; background-color: rgb(253, 27, 27); margin: 20px; border-radius: 10px; padding: 20px;">
+            <h4 style="text-align: center;">{{ campo }}: {{ erro }}</h4>
+        </div>
+    {% endfor %}
+            
+{% endif %}
+
     <div class="page">
         <h1 style="color: aquamarine;">CADASTRAR FUNCIONÁRIO</h1>
     </div>
 
-    <form action="{% url 'registro.post' %}" method="post" class="form" style="height: 85vh;">
+    <form action="{% url 'registro.post' %}" method="post" class="form" style="height: 100vh; gap: 10px;">
         {% csrf_token %}
 
-        {{ form.as_p }}
+        <label for="nome">Nome Completo</label>
+        <input type="text" id="nome" name="nome" placeholder="Insira seu Nome Completo" required>
+        
+        <label for="username">Nome De Usuário</label>
+        <input type="text" name="username" id="username" placeholder="Defina seu nome de usuário" required>
+        
+        <label for="email">E-Mail</label>
+        <input type="email" name="email" id="email" placeholder="Seu endereço de e-mail" required>
+        
+        <label for="password1">Palavra-Passe</label>
+        <input type="password" name="password1" id="password1" placeholder="defina uma palavra-passe com mínimo de 8 dígitos" required>
+        
+        <label for="password2">Confirme a Palavra-Passe</label>
+        <input type="password" name="password2" id="password2" placeholder="Insira novamente a palavra-passe" required>
 
         <div class="btn-edite">
             <button type="submit" id="btn-actua" style="background: yellow;">Registrar</button>
             <button id="btn-actua" style="background: gainsboro;">
-                <a href="{% url 'lista' %}" style="color: black;">Voltar</a>
+                <a href="{% url 'index' %}" style="color: black;">Voltar</a>
             </button>
         </div>
 

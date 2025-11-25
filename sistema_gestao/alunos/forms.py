@@ -1,5 +1,5 @@
 from django import forms
-from .models import Alunos, Propinas
+from .models import Alunos, Propinas, Mensalidade, Disciplinas, Professores, Notas
 from .models import Usuario
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
@@ -163,11 +163,11 @@ class RegistroForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super(RegistroForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget_attrs.update({'class' : 'form-control'})
-        self.fields['email'].widget_attrs.update({'class' : 'form-control'})
-        self.fields['nome'].widget_attrs.update({'class' : 'form-control'})
-        self.fields['password1'].widget_attrs.update({'class' : 'form-control'})
-        self.fields['password2'].widget_attrs.update({'class' : 'form-control'})
+        self.fields['username'].widget.attrs.update()
+        self.fields['email'].widget.attrs.update()
+        self.fields['nome'].widget.attrs.update()
+        self.fields['password1'].widget.attrs.update()
+        self.fields['password2'].widget.attrs.update()
 
 """Formulário Para Fazer o Login"""
 class LoginForm(AuthenticationForm):
@@ -187,22 +187,81 @@ class PropinaForm(forms.ModelForm):
         model = Propinas
         fields = ('aluno', 'mes', 'preco')
 
-    widget = {
+    widgets = {
         'aluno' : forms.TextInput(attrs={'readonly' : 'readonly', 'class' : 'genero'}),
 
         'mes' : forms.DateInput(attrs={'type' : 'date',}),
 
-        'preco' : forms.Select(attrs={'class' : 'genero'}, choices=[
-            ('10000', '10.000,00kz'),
-            ('11000', '11.000,00kz'),
-            ('12000', '12.000,00kz'),
-            ('13000', '13.000,00kz'),
-            ('14000', '14.000,00kz'),
-            ('15000', '15.000,00kz'),
-            ('16000', '16.000,00kz'),
-            ('17000', '17.000,00kz'),
-            ('18000', '18.000,00kz'),
-            ('19000', '19.000,00kz'),
-            ('20000', '20.000,00kz')
+        'preco' : forms.Select(attrs={'class' : 'genero'})
+    }
+
+class MensalidadeForm(forms.ModelForm):
+    class Meta:
+        model = Mensalidade
+        fields = ('curso', 'classe', 'mensalidade')
+
+    widgets = {
+        'curso' : forms.TextInput(attrs={'readonly' : 'readonly'}),
+        'classe' : forms.Select(attrs={'class' : 'genero'}, choices=[
+            ('10', '10ª Classe'),
+            ('11', '11ª Classe'),
+            ('12', '12ª Classe'),
+            ('13', '13ª Classe')
         ]),
+
+        'mensalidade' : forms.Select(attrs={'class' : 'genero'}, choices=[
+            (10000.00, '10.000,00kz'),
+            (11000.00, '11.000,00kz'),
+            (12000.00, '12.000,00kz'),
+            (13000.00, '13.000,00kz'),
+            (14000.00, '14.000,00kz'),
+            (15000.00, '15.000,00kz'),
+            (16000.00, '16.000,00kz'),
+            (17000.00, '17.000,00kz'),
+            (18000.00, '18.000,00kz'),
+            (19000.00, '19.000,00kz'),
+            (20000.00, '20.000,00kz')
+        ]),
+    }
+
+class DisciplinaForm(forms.ModelForm):
+    class Meta:
+        model = Disciplinas
+        fields = '__all__'
+
+    widgets = { 'nome' : forms.TextInput() }
+    
+
+class ProfessorForm(forms.ModelForm):
+    class Meta:
+        model = Professores
+        fields = ('nome','sobrenome','disciplina','tempo_trabalho')
+
+    widgets = {
+        'nome' : forms.TextInput(attrs={'placeholder':'Seu nome'}),
+        'sobrenome' : forms.TextInput(attrs={'placeholder':'Seu sobrenome'}),
+        'disciplina' : forms.TextInput(attrs={'placeholder':'Disciplina que leciona'}),
+        'tempo_trabalho' : forms.DateInput(attrs={'class':'genero'})
+    }
+
+class NotaForm(forms.ModelForm):
+    class Meta:
+        model = Notas
+        fields = ('professor','aluno','disciplina','trimestre','prova','nota')
+
+    widgets = {
+        'professor' : forms.TextInput(),
+        'aluno' : forms.TextInput(),
+        'disciplina' : forms.TextInput(),
+        'trimestre' : forms.Select(attrs={'class':'genero'}, choices= [
+            ('1º'),
+            ('2º'),
+            ('3º')
+        ]),
+        'prova' : forms.Select(attrs={'class':'genero'}, choices= [
+            ('Avaliação'),
+            ('Prova do professor'),
+            ('Prova Trimestral')
+        ]),
+        'nota' : forms.NumberInput()
     }

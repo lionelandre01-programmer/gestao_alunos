@@ -1,0 +1,48 @@
+{% extends 'aluno/layout/base.html' %}
+
+{% block content %}
+
+{% if erros %}
+
+    {% for campo, erro in erros.items %}
+        <div style="width: 50%; height: auto; background-color: rgb(253, 27, 27); margin: 20px; border-radius: 10px; padding: 20px;">
+            <h4 style="text-align: center;">{{ campo }}: {{ erro }}</h4>
+        </div>
+    {% endfor %}
+            
+{% endif %}
+
+    <div class="page">
+        <h1 style="color: aquamarine;">CADASTRO DE PROFESSOR</h1>
+    </div>
+
+    <form action="{% url 'professor.post' %}" method="post" class="form" style="height: 100vh;">
+        {% csrf_token %}
+
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" name="nome" placeholder="Nome do Professor" style="height: 10%; border-radius: 5px; border: 1px;" required>
+
+        <label for="sobre">Sobrenome</label>
+        <input type="text" name="sobrenome" id="sobre" placeholder="Sobrenome do Professor" style="height: 10%; border-radius: 5px; border: 1px;" required>
+
+        <label for="dis">Disciplina</label>
+        <select name="disciplina" id="dis" style="height: 10%; border-radius: 5px;" class="genero">
+            {% for disciplina in disciplinas %}
+            <option value="{{ disciplina.id }}">{{ disciplina.nome }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="tempo">Tempo de Trabalho</label>
+        <input type="text" name="tempo_trabalho" id="tempo" placeholder="Horas de trabalho por semana" style="height: 10%; border-radius: 5px; border: 1px;" required>
+
+        <div class="btn-cadastra">
+            <button type="submit" id="btn-cada" class="btn-pretende" style="background: rgb(0, 174, 255);">Cadastrar</button>
+            <button type="reset" id="btn-cada" style="background: rgb(233, 48, 42);">Limpar</button>
+            <button id="btn-cada" style="background: gainsboro;">
+                <a href="{% url 'lista' %}" style="color: black;">Voltar</a>
+            </button>
+        </div>
+
+    </form>
+
+{% endblock %}

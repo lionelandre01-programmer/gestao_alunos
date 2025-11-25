@@ -82,7 +82,7 @@ class Alunos(models.Model):
 class Propinas(models.Model):
     aluno = models.ForeignKey('Alunos', on_delete=models.SET_NULL, null = True)
     mes = models.CharField(max_length=50)
-    preco = models.DecimalField(max_digits=10, decimal_places=2)
+    preco = models.ForeignKey('Mensalidade', on_delete=models.SET_NULL, null = True)
     data_pagamento = models.DateTimeField(auto_now_add = True)
 
     def __str__(self):
@@ -90,9 +90,56 @@ class Propinas(models.Model):
 
 
 class Mensalidade(models.Model):
+    Classes = [
+        (10, '10ª Classe'),
+        (11, '11ª Classe'),
+        (12, '12ª Classe'),
+        (13, '13ª Classe')
+    ]
+
     curso = models.ForeignKey('Cursos', on_delete=models.SET_NULL, null=True, default=None)
-    classe10 = models.DecimalField(max_digits=10, decimal_places=2)
-    classe11 = models.DecimalField(max_digits=10, decimal_places=2)
-    classe12 = models.DecimalField(max_digits=10, decimal_places=2)
-    classe13 = models.DecimalField(max_digits=10, decimal_places=2)
+    classe = models.IntegerField(choices=Classes)
+    mensalidade = models.DecimalField(max_digits=10, decimal_places=2)
+    registrada = models.DateTimeField(auto_now_add=True)
+
+    def get_valor(self):
+        return self.mensalidade
+    
+class Disciplinas(models.Model):
+    nome = models.CharField(max_length=255)
+    registrada = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.nome
+
+class Professores(models.Model):
+    nome = models.CharField(max_length=255)
+    sobrenome = models.CharField(max_length=255)
+    disciplina = models.ForeignKey('Disciplinas', on_delete=models.SET_NULL, null=True)
+    tempo_trabalho = models.TimeField()
+    registrado = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.nome} {self.sobrenome}"
+
+class Notas(models.Model):
+    Trimestre = [
+        ('1º','Primeiro Trimestre'),
+        ('2º','Segundo Trimestre'),
+        ('3º','Terceiro Trimestre')
+    ]
+
+    Provas = [
+        ('Avaliação','Avaliação Contínua'),
+        ('Prova do professor','Prova do Professor'),
+        ('Prova Trimestral','Prova do Trimestre')
+    ]
+
+    professor = models.ForeignKey('Professores', on_delete=models.SET_NULL, null=True)
+    aluno = models.ForeignKey('Alunos', on_delete=models.SET_NULL, null=True)
+    disciplina = models.ForeignKey('Disciplinas', on_delete=models.SET_NULL, null=True)
+    trimestre = models.CharField(max_length=5, choices=Trimestre)
+    prova = models.CharField(max_length=100, choices=Provas)
+    nota = models.IntegerField()
+    registrada = models.DateTimeField(auto_now_add=True)
 

@@ -1,0 +1,87 @@
+{% extends 'aluno/layout/base.html' %}
+
+{% block content %}
+
+{% if messages %}
+    
+    <div style="width: 50%; height: auto; background-color: rgb(253, 27, 27); margin: 20px; border-radius: 10px; padding: 20px;">
+        <h1 style="text-align: center;">{{ message }}</h1>
+    </div>
+
+{% endif %}
+
+<div class="page" style="margin-top: 20px; align-self: start; margin-left: 20px;">
+    <h1 style="color: aquamarine;">MENSALIDADES</h1>
+</div>
+
+<div class="divmensa">
+
+    <div class="totalmensa">
+        <h2>Mensaliodades De Enfermagem</h2>
+        {% if enfe %}
+        {% for enf in enfe %}
+        <h2>{{ enf.classe }}ª Classe: {{ enf.mensalidade }}kz</h2>
+        {% endfor %}
+        {% else %}
+        <h2 style="color: red;">Sem Mensalidades Registradas Neste Curso</h2>
+        {% endif %}
+    </div>
+
+    <div class="totalmensa">
+        <h2>Mensalidades De Contabilidade</h2>
+        {% if cont %}
+        {% for con in cont %}
+        <h2>{{ con.classe }}ª Classe: {{ con.mensalidade }}kz</h2>
+        {% endfor %}
+        {% else %}
+        <h2 style="color: red;">Sem Mensalidades Registradas Neste Curso</h2>
+        {% endif %}
+    </div>
+
+    <div class="totalmensa">
+        <h2>Mensalidades De Programação</h2>
+        {% if prog %}
+        {% for pro in prog %}
+        <h2>{{ pro.classe }}ª Classe: {{ pro.mensalidade }}kz</h2>
+        {% endfor %}
+        {% else %}
+        <h2 style="color: red;">Sem Mensalidades Registradas Neste Curso</h2>
+        {% endif %}
+    </div>
+
+    <div class="totalmensa">
+        <h2>Mensalidades De Electricidade</h2>
+        {% if elec %}
+        {% for ele in elec %}
+        <h2>{{ ele.classe }}ª Classe: {{ ele.mensalidade }}kz</h2>
+        {% endfor %}
+        {% else %}
+        <h2 style="color: red;">Sem Mensalidades Registradas Neste Curso</h2>
+        {% endif %}
+    </div>
+
+    <div class="totalmensa">
+        <h2>Mensalidades De Gestão Empresarial</h2>
+        {% if geEm %}
+        {% for ge in geEm %}
+        <h2>{{ ge.classe }}ª Classe: {{ ge.mensalidade }}kz</h2>
+        {% endfor %}
+        {% else %}
+        <h2 style="color: red;">Sem Mensalidades Registradas Neste Curso</h2>
+        {% endif %}
+    </div>
+
+    <div class="totalmensa">
+        <h2>Mensalidades De Informática</h2>
+        {% if info %}
+        {% for inf in info %}
+        <h2>{{ inf.classe }}ª Classe: {{ inf.mensalidade }}kz</h2>
+        {% endfor %}
+        {% else %}
+        <h2 style="color: red;">Sem Mensalidades Registradas Neste Curso</h2>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

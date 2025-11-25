@@ -1,14 +1,14 @@
 from django.shortcuts import render
-from django.shortcuts import redirect, HttpResponse
+from django.shortcuts import redirect, HttpResponseRedirect
 from django.urls import reverse
-from .models import Alunos
-from .models import Salas
+from .models import Alunos, Professores, Disciplinas
+from .models import Salas, Mensalidade
 from .models import Cursos
-from .forms import Formulario_Cadastro, PropinaForm
-from .forms import EditeForm, RegistroForm, LoginForm
+from .forms import Formulario_Cadastro, MensalidadeForm, DisciplinaForm
+from .forms import EditeForm, RegistroForm, LoginForm, ProfessorForm, NotaForm
 from django.contrib.auth import login, authenticate, logout
 from .models import Propinas
-from .models import Movimentos
+from .models import Movimentos, Mensalidade
 from django.contrib import messages
 
 # Create your views here.
@@ -31,7 +31,16 @@ def novo_aluno(request):
     if request.method == 'POST':
         form = Formulario_Cadastro(request.POST)
         if form.is_valid():
+            nome = form.cleaned_data['nome']
             aluno = form.save()
+
+            if request.user.is_authenticated:
+                Movimentos.objects.create(
+                tipo = 'Novo aluno',
+                Aluno = nome,
+                funcionario = request.user.nome
+                )
+
             return render(request, 'aluno/cadastro.html', {'aluno' : aluno})
         else:
             print(form.errors)
@@ -85,6 +94,14 @@ def actualizar(request, id):
         form = EditeForm(request.POST, instance = aluno)
         if form.is_valid():
             form.save()
+
+            if request.user.is_authenticated:
+                Movimentos.objects.create(
+                tipo = 'Aluno Editado',
+                Aluno = aluno.nome,
+                funcionario = request.user.nome
+                )
+
             return redirect(reverse('lista'))
     else:
         return redirect(reverse('edite'))
@@ -92,7 +109,16 @@ def actualizar(request, id):
 """Eliminar aluno"""
 def delete(request, id):
     aluno = Alunos.objects.get(id=id)
+    
+    if request.user.is_authenticated:
+        Movimentos.objects.create(
+        tipo = 'Aluno Deletado',
+        Aluno = aluno.nome,
+        funcionario = request.user.nome
+        )
+            
     aluno.delete()
+
     return redirect(reverse('lista'))
 
 """Realizar busca de aluno pelo id ou nome"""
@@ -134,7 +160,9 @@ def propina_pagas(request, id):
 def propina(request, id):
     aluno = Alunos.objects.get(id=id)
     ultimo = Propinas.objects.filter(aluno = aluno).order_by('-id').first()
-    return render(request, 'aluno/propina.html', {'aluno' : aluno, 'ultimo' : ultimo})
+    mensal = Mensalidade.objects.get(curso_id=aluno.curso_id, classe=aluno.classe)
+    mensali = mensal.mensalidade
+    return render(request, 'aluno/propina.html', {'aluno' : aluno, 'ultimo' : ultimo, 'mensali' : mensali})
 
 def pagar_propina(request):
     if request.method == 'POST':
@@ -158,7 +186,14 @@ def pagar_propina(request):
                 aluno = aluno,
                 mes = mes,
                 preco = preco
-            ).save()
+            )
+
+            if request.user.is_authenticated:
+                Movimentos.objects.create(
+                tipo = 'Propina Paga',
+                Aluno = aluno.nome,
+                funcionario = request.user.nome
+                )
 
             messages.success(request, 'Propina Paga com sucesso!')
             return redirect(reverse('abaBusca'))
@@ -186,8 +221,8 @@ def turmas(request):
 
 """Trazer todas as actividades que ocorrem no sistema"""
 def movimentos(request):
-    movimento = Movimentos.objects.all()
-    return render(request, 'aluno/movimentos.html', {'movimento' : movimento})
+    movimentos = Movimentos.objects.all()
+    return render(request, 'aluno/movimentos.html', {'movimentos' : movimentos})
 
 """Cadastro de um funcionário"""
 def abaRegistro(request):
@@ -198,8 +233,26 @@ def registro(request):
     if request.method == 'POST':
         form = RegistroForm(request.POST)
         if form.is_valid():
+            nome = form.cleaned_data['nome']
             form.save()
-            return redirect('login')
+
+            if request.user.is_authenticated:
+                Movimentos.objects.create(
+                tipo = 'Novo funcionário',
+                Aluno = nome,
+                funcionario = request.user.nome
+                )
+
+            return redirect(reverse('login'))
+        
+        else:
+            print(form.errors)
+            erros = {}
+            for campo, erro in form.errors.items():
+                erros[campo] =  erro
+
+            messages.error(request, 'Escolha uma palavra passe forte com letras e números')
+            return render(request,'aluno/registro.html', {'erros' : erros})
 
     else:
         form = RegistroForm()
@@ -287,3 +340,145 @@ def criar_curso(request):
 
     messages.success(request, 'Cursos criados com sucesso!')
     return redirect(reverse('index'))
+
+"""Registrando Mensalidades"""
+def mensal(request):
+    cursos = Cursos.objects.all()
+    return render(request, 'aluno/mensal.html', {'cursos' : cursos})
+
+def registro_mensalidade(request):
+    if request.method == 'POST':
+        form = MensalidadeForm(request.POST)
+
+        if form.is_valid():
+            if Mensalidade.objects.filter(curso=form.cleaned_data['curso'], mensalidade=form.cleaned_data['mensalidade']).exists():
+                messages.error(request, 'Mensalidade já registrada!')
+                return redirect(reverse('mensalidade'))
+            
+            else:
+                form.save()
+
+                if request.user.is_authenticated:
+                    Movimentos.objects.create(
+                    tipo = 'Mensalidade',
+                    Aluno = 'WithOut',
+                    funcionario = request.user.nome
+                    )
+
+                messages.success(request, 'Mensalidade Cadastrada')
+                return HttpResponseRedirect(reverse('mensalidade'))
+            
+        else:
+            messages.error(request, 'Formulário Inválido!')
+            return redirect(reverse('mensalidade'))
+    
+    else:
+        form = MensalidadeForm()
+        return render(request, 'aluno/mensal.html')
+    
+def mensalidades(request):
+    mensalidades = Mensalidade.objects.all()
+
+    if mensalidades:
+        prog = Mensalidade.objects.filter(curso_id=1)
+        info = Mensalidade.objects.filter(curso_id=2)
+        cont = Mensalidade.objects.filter(curso_id=3)
+        geEm = Mensalidade.objects.filter(curso_id=4)
+        elec = Mensalidade.objects.filter(curso_id=5)
+        enfe = Mensalidade.objects.filter(curso_id=6)
+        return render(request, 'aluno/mensalidades.html', {
+            'mensalidades' : mensalidades,
+            'prog' : prog,
+            'info' : info,
+            'cont' : cont,
+            'geEm' : geEm,
+            'elec' : elec,
+            'enfe' : enfe
+            })
+    
+    else:
+        messages.error(request, 'Sem Mensalidades!')
+        return redirect(reverse('menslidades'))
+    
+def disciplina(request):
+    form = DisciplinaForm()
+    return render(request, 'aluno/disciplinas.html', {'form' : form})
+
+def disciplinaSave(request):
+    if request.method == 'POST':
+        form = DisciplinaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            if request.user.is_authenticated:
+                Movimentos.objects.create(
+                tipo = 'Nova Disciplina',
+                Aluno = 'WithOut',
+                funcionario = request.user.nome
+            )
+                
+            return redirect(reverse('disciplina'))
+        
+        else:
+            return redirect(reverse('disciplina'))
+    else:
+        form = DisciplinaForm()
+        return render(request, 'aluno/disciplinas.html', {'form' : form})
+    
+def professor(request):
+    disciplinas = Disciplinas.objects.all()
+    return render(request, 'aluno/professores.html', {'disciplinas' : disciplinas})
+
+def professorSave(request):
+    if request.method == 'POST':
+        form = ProfessorForm(request.POST)
+        if form.is_valid():
+            nome = form.cleaned_data['nome']
+            form.save()
+            
+            if request.user.is_authenticated:
+                Movimentos.objects.create(
+                tipo = 'Novo Professor',
+                Aluno = 'Prof. '+nome,
+                funcionario = request.user.nome
+            )
+            return redirect(reverse('professor'))    
+            
+        else:
+            print(form.errors)
+            erros = {}
+            for campo, erro in form.errors.items():
+                erros[campo] =  erro
+
+            return render(request, 'aluno/professores.html',{'erros':erros})
+    else:
+        return redirect(reverse('professor'))
+    
+def nota(request):
+    professores = Professores.objects.all()
+    alunos = Alunos.objects.all()
+    disciplinas = Disciplinas.objects.all()
+    return render(request, 'aluno/notas.html', {'professores' : professores, 'alunos' : alunos, 'disciplinas' : disciplinas})
+
+def notaSave(request):
+    if request.method == 'POST':
+        form = NotaForm(request.POST)
+        if form.is_valid():
+            alunos = form.cleaned_data['aluno']
+            form.save()
+            aluno = Alunos.objects.get(id=alunos)
+            
+            if request.user.is_authenticated:
+                Movimentos.objects.create(
+                tipo = 'Nota Preenchida',
+                Aluno = aluno.nome,
+                funcionario = request.user.nome
+            )
+        else:
+            print(form.errors)
+            erros = {}
+            for campo, erro in form.errors.items():
+                erros[campo] =  erro
+
+            return render(request, 'aluno/notas.html',{'erros':erros})
+    else:
+        return redirect(reverse('professor'))
