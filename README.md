@@ -18,10 +18,6 @@ Sistema desenvolvido para facilitar o gerenciamento de alunos em instituições 
 - Banco de Dados: SQLite3  
 - Outros: JavaScript, Git/GitHub
 
-📷 Capturas de Tela
-
-> (Adicione imagens aqui se quiser mostrar o sistema funcionando)
-
 🚀 Como Executar
 
 1. Clone o repositório  
