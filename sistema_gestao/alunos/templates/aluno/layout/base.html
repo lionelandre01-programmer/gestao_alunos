@@ -1,4 +1,5 @@
 {% load static %}
+{% load l10n %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -37,6 +38,7 @@
                 <button><li><a href="{% url 'disciplina' %}">Disciplinas</a></li></button>
                 <button><li><a href="{% url 'professor' %}">Professores</a></li></button>
                 <button><li><a href="{% url 'nota' %}">Notas</a></li></button>
+                <button><li><a href="{% url 'dadosfina' %}">Finanças</a></li></button>
             </ul>
             {% endif %}
         </aside>

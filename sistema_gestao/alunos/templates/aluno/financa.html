@@ -1,0 +1,48 @@
+{% extends 'aluno/layout/base.html' %}
+
+{% block content %}
+
+<div class="page" style="width: auto; align-self: start; margin: 20px;">
+        <h1 style="color: aquamarine;">MOVIMENTOS FINANCEIROS</h1>
+</div>
+
+
+<table >
+
+
+    <tr>
+        <th>Id</th>
+        <th>Pagamento</th>
+        <th>Valor</th>
+        <th>Mês (Opcional)</th>
+        <th>Responsável</th>
+        <th>Data do pagamento</th>
+    </tr>
+
+{% for pago in pagos %}
+
+    <tr>
+
+        <td>{{ pago.id }}</td>
+        <td>{{ pago.tipo }}</td>
+        <td>{{ pago.valor }}kz</td>
+        <td>{{ pago.mes }}</td>
+        <td>{{ pago.funcionario }}</td>
+        <td>{{ pago.registrado | date:'d/m/Y h:i' }}</td>
+
+    </tr>
+
+
+{% empty %}
+
+    <div style="width: 50%; height: auto; background-color: rgb(253, 27, 27); margin: 20px; border-radius: 10px; padding: 20px;">
+        <h1 style="text-align: center;">Lista Vazia</h1>
+    </div>
+
+{% endfor %}
+
+</table>
+
+
+
+{% endblock %}

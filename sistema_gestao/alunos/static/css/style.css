@@ -57,7 +57,7 @@ main{
     min-width: 80%;
     margin-left: 1%;
     min-height: 83vh;
-    top: 50px;
+    margin-top: 15vh;
 }
 
 aside{
@@ -275,7 +275,7 @@ th{
 }
 
 .divmensa{
-    height: 120vh;
+    height: 130vh;
     width: 98%;
     margin-top: 20px;
     background: aliceblue;

@@ -1,15 +1,18 @@
 from django.shortcuts import render
-from django.shortcuts import redirect, HttpResponseRedirect
+from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Alunos, Professores, Disciplinas
-from .models import Salas, Mensalidade
-from .models import Cursos
+from .models import Salas, Mensalidade, Pagamentos
+from .models import Cursos, Notas
 from .forms import Formulario_Cadastro, MensalidadeForm, DisciplinaForm
 from .forms import EditeForm, RegistroForm, LoginForm, ProfessorForm, NotaForm
 from django.contrib.auth import login, authenticate, logout
 from .models import Propinas
 from .models import Movimentos, Mensalidade
 from django.contrib import messages
+from django.db.models import Sum
+from decimal import Decimal
 
 # Create your views here.
 def index(request):
@@ -39,6 +42,12 @@ def novo_aluno(request):
                 tipo = 'Novo aluno',
                 Aluno = nome,
                 funcionario = request.user.nome
+                )
+
+                Pagamentos.objects.create(
+                    tipo = 'Matrícula',
+                    valor = 9000.00,
+                    funcionario = request.user.nome
                 )
 
             return render(request, 'aluno/cadastro.html', {'aluno' : aluno})
@@ -161,7 +170,7 @@ def propina(request, id):
     aluno = Alunos.objects.get(id=id)
     ultimo = Propinas.objects.filter(aluno = aluno).order_by('-id').first()
     mensal = Mensalidade.objects.get(curso_id=aluno.curso_id, classe=aluno.classe)
-    mensali = mensal.mensalidade
+    mensali = mensal
     return render(request, 'aluno/propina.html', {'aluno' : aluno, 'ultimo' : ultimo, 'mensali' : mensali})
 
 def pagar_propina(request):
@@ -169,8 +178,9 @@ def pagar_propina(request):
         
         id = request.POST.get('aluno')
         mes = request.POST.get('mes')
-        preco = request.POST.get('preco')
+        preco = request.POST.get('mensal')
         aluno = Alunos.objects.get(id=id)
+        mensali = Mensalidade.objects.get(id=preco)
         propinas = Propinas.objects.filter(aluno_id = id)
         meses = []
 
@@ -185,7 +195,7 @@ def pagar_propina(request):
             Propinas.objects.create(
                 aluno = aluno,
                 mes = mes,
-                preco = preco
+                preco = mensali
             )
 
             if request.user.is_authenticated:
@@ -195,8 +205,15 @@ def pagar_propina(request):
                 funcionario = request.user.nome
                 )
 
-            messages.success(request, 'Propina Paga com sucesso!')
-            return redirect(reverse('abaBusca'))
+                Pagamentos.objects.create(
+                    tipo = 'Propina',
+                    mes = mes,
+                    valor = mensali.mensalidade,
+                    funcionario = request.user.nome
+                )
+
+                messages.success(request, 'Propina Paga com sucesso!')
+                return redirect(reverse('abaBusca'))
     
     else:
         messages.error(request, 'Falha no envio do formulário!')
@@ -415,12 +432,15 @@ def disciplinaSave(request):
                 Aluno = 'WithOut',
                 funcionario = request.user.nome
             )
-                
+
+            messages.success(request, 'Nova Disciplina Adicionada!')
             return redirect(reverse('disciplina'))
         
         else:
+            messages.error(request, 'Formulário Inválido!')
             return redirect(reverse('disciplina'))
     else:
+        messages.warning(request, 'O formulário não foi enviado!')
         form = DisciplinaForm()
         return render(request, 'aluno/disciplinas.html', {'form' : form})
     
@@ -462,17 +482,19 @@ def nota(request):
 def notaSave(request):
     if request.method == 'POST':
         form = NotaForm(request.POST)
+        alunos = request.POST['aluno']
         if form.is_valid():
-            alunos = form.cleaned_data['aluno']
             form.save()
-            aluno = Alunos.objects.get(id=alunos)
+            alun = Alunos.objects.get(id=alunos)
             
             if request.user.is_authenticated:
                 Movimentos.objects.create(
                 tipo = 'Nota Preenchida',
-                Aluno = aluno.nome,
+                Aluno = alun.nome,
                 funcionario = request.user.nome
             )
+            return redirect(reverse('nota'))
+
         else:
             print(form.errors)
             erros = {}
@@ -482,3 +504,24 @@ def notaSave(request):
             return render(request, 'aluno/notas.html',{'erros':erros})
     else:
         return redirect(reverse('professor'))
+    
+def financa(request):
+    pagos = Pagamentos.objects.all()
+    return render(request,'aluno/financa.html', {'pagos' : pagos})
+    
+def pagamentos(request):
+    totalpagos = Pagamentos.objects.aggregate(total = Sum('valor'))['total']
+    propinas = Pagamentos.objects.filter(tipo='Propina').aggregate(prop = Sum('valor'))['prop']
+    outros = Pagamentos.objects.exclude(tipo='Propina').aggregate(out = Sum('valor'))['out']
+    return render(request, 'aluno/dadosfina.html', 
+                  {
+                    'totalpagos' : totalpagos,
+                    'propinas' : propinas,
+                    'outros' : outros
+                  }
+                  )
+
+def verNotas(request, id):
+    notas = Notas.objects.filter(aluno_id=id)
+    aluno = Alunos.objects.get(id=id)
+    return render(request, 'aluno/notas_aluno.html', {'notas' : notas, 'aluno' : aluno})

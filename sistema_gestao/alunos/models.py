@@ -143,3 +143,20 @@ class Notas(models.Model):
     nota = models.IntegerField()
     registrada = models.DateTimeField(auto_now_add=True)
 
+class Pagamentos(models.Model):
+    Tipos = [
+        ('Matrícula','Matrícula'),
+        ('Confirmação','Confirmação'),
+        ('Propina','Propina'),
+        ('Prova','Prova'),
+        ('Uniforme','Uniforme'),
+        ('Cartão','Cartão'),
+        ('Estágio','Estágio')
+    ]
+
+    tipo = models.CharField(max_length=100, choices=Tipos)
+    mes = models.CharField(max_length=100, blank=True, null=True)
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    funcionario = models.CharField(max_length=50)
+    registrado = models.DateTimeField(auto_now_add=True)
+

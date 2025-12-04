@@ -61,7 +61,8 @@
         </select>
 
         <label for="preco">Preço:</label>
-        <input type="" name="preco" value="{{ mensali }}" style="height: 25vh;" readonly>
+        <input type="" name="preco" value="{{ mensali.mensalidade }}" style="height: 25vh;" readonly>
+        <input type="hidden" name="mensal" value="{{ mensali.id }}" style="height: 25vh;" readonly>
 
         {% if form.errors %}
             <ul>

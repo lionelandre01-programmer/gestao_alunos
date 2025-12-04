@@ -35,4 +35,7 @@ urlpatterns = [
     path('postprofessor/', views.professorSave, name='professor.post'),
     path('nota/', views.nota, name='nota'),
     path('postnota/', views.notaSave, name='nota.post'),
+    path('financa/', views.pagamentos, name='dadosfina'),
+    path('movifinas/', views.financa, name='financa'),
+    path('vernotas/<int:id>', views.verNotas, name='vernotas')
 ]

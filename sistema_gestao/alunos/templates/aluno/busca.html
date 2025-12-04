@@ -50,10 +50,17 @@
             <h4>Data De Inscrição: <span>{{ aluno.matricula | date:'d/m/Y h:i'}}</span></h4>
         </div>
 
-        <button style="background: gainsboro; width: 50%; height: 10%;
-         border: 2px solid aliceblue; border-radius: 10px; background: rgb(0, 162, 255);">
-            <a href="{% url 'propina' aluno.id %}" style="color: black;">Pagamento</a>
-        </button>
+        <div style="height: 6vh; display: flex; width: 100%; gap: 20px;">
+            <button style="background: gainsboro; width: 40%; height: 100%;
+            border: 2px solid aliceblue; border-radius: 10px; background: rgb(0, 162, 255);">
+                <a href="{% url 'propina' aluno.id %}" style="color: black;">Pagamento</a>
+            </button>
+
+            <button style="background: gainsboro; width: 40%; height: 100%;
+            border: 2px solid aliceblue; border-radius: 10px; background: rgb(0, 162, 255);">
+                <a href="{% url 'vernotas' aluno.id %}" style="color: black;">Ver Notas</a>
+            </button>
+        </div>
     </div>
 
 {% else %}
