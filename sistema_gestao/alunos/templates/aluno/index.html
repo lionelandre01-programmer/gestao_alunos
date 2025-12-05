@@ -27,15 +27,24 @@
 {% endif %}
 
 {% if request.user.is_authenticated %}
-<div class="form" style="height: 50vh;">
+<div class="indexe">
+    <div style="width: 100%; height: 50%; background-color: black; 
+    padding: 10px 25px; border-bottom-left-radius: 100px;">
     <h1>Ola {{ request.user.nome }}!</h1>
-    <h2>No que podemos ajudá-lo?</h2>
+    <h2>Seja Bem-Vindo de volta ao sistema!</h2>
+    <h2>Esperamos que estejas disposta para mais um dia laboral</h2> <br>
+    <h3 style="color: aqua; text-align: end;">Tenha Um bom dia!</h3>
+    </div>
+    
+    {% if sala and curso %}
+    <div style="width: 100%; height: 50%; background-color: aqua; 
+    border-top-right-radius: 100px; align-items: center; justify-content: center; display: flex;">
+        <h1 style="color: black; text-align: center;">Salas e Cursos Criados</h1>
+    </div>
 
+    {% elif curso and not sala %}
     <div class="btn-cadastra" class="criar" style="height: 30%;">
-        {% if sala and curso %}
-        <h1>Salas e Cursos Criados</h1>
-
-        {% elif curso and not sala %}
+        
         <button id="btn-cada" style="background: rgb(0, 174, 255);">
             <a href="{% url 'salas' %}" style="color: black;">Criar as Salas</a>
         </button>

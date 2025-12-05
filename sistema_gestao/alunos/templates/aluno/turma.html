@@ -4,44 +4,41 @@
 
 {% load static %}
 
-<form action="{% url 'turma' %}" method="post" style="width: 48%; display: flex; gap: 10px; align-items: center; background-color: rgb(90, 89, 89); padding: 15px; border-radius: 10px;">
+<form action="{% url 'turma' %}" method="post" class="form-turma">
 
     {% csrf_token %}
-    <div style="width: 25%; height: 100%; display: flex; flex-direction: column; gap: 25px;">
+        
         <label for="classe">Classe:</label>
-        <label for="turma">Turma:</label>
-        <label for="turno">Turno:</label>
-    </div>
-
-    <div style="width: 40%; height: 100%; display: flex; flex-direction: column; gap: 10px;">
-        <select name="classe" style="height: 30px; border-radius: 5px;">
+        <select name="classe" style="height: 40px; border-radius: 5px; width: 90%;">
             <option value="10">10ª Classe</option>
             <option value="11">11ª Classe</option>
             <option value="12">12ª Classe</option>
             <option value="13">13ª Classe</option>
         </select>
 
-        <select name="turma" style="height: 30px; border-radius: 5px;">
+        <label for="turma">Turma:</label>
+        <select name="turma" style="height: 40px; border-radius: 5px; width: 90%;">
             <option value="A">Turma A</option>
             <option value="B">Turma B</option>
             <option value="C">Turma C</option>
             <option value="D">Turma D</option>
         </select>
 
-        <select name="turno" style="height: 30px; border-radius: 5px;">
+        <label for="turno">Turno:</label>
+        <select name="turno" style="height: 40px; border-radius: 5px; width: 90%;">
             <option value="Manhã">Turno da manhã</option>
             <option value="Tarde">Turno da tarde</option>
         </select>
-    </div>
+
     
-    <button type="submit" style="width: 30%; height: 70px; background: rgb(0, 132, 255); 
-    border: 1px solid black; border-radius: 5px;"><h1>Buscar</h1></button>
+    <button type="submit" style="width: 40%; height: 50px; background: rgb(0, 132, 255); 
+    border: 1px solid black; border-radius: 5px; align-self: self-start; margin-left: 28px;"><h1>Buscar</h1></button>
 
 </form>
 
 {% if todos %}
 
-    <div class="page">
+    <div class="page" style="margin-top: 30px;">
         <h1 style="color: aquamarine;">RESULTADO DA BUSCA</h1>
     </div>
 

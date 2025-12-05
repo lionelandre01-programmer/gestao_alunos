@@ -12,7 +12,7 @@ from .models import Propinas
 from .models import Movimentos, Mensalidade
 from django.contrib import messages
 from django.db.models import Sum
-from decimal import Decimal
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
@@ -21,15 +21,18 @@ def index(request):
     curso = Cursos.objects.all()
     return render(request, 'aluno/index.html', {'sala' : sala, 'curso' : curso})
 
+@login_required(login_url='/login/')
 def lista(request):
     aluno = Alunos.objects.all()
     return render(request, 'aluno/lista.html', {'aluno' : aluno})
 
 """Cadastrando um novo aluno"""
+@login_required(login_url='/login/')
 def cadastro(request):
     form = Formulario_Cadastro()
     return render(request, 'aluno/cadastro.html', {'form' : form})
 
+@login_required(login_url='/login/')
 def novo_aluno(request):
     if request.method == 'POST':
         form = Formulario_Cadastro(request.POST)
@@ -59,6 +62,7 @@ def novo_aluno(request):
         return render(request, 'aluno/cadastro.html', {'form' : form})
    
 """DashBoard Do Sistema"""
+@login_required(login_url='/login/')
 def dashboard(request):
     total = Alunos.objects.count()
     masculino = Alunos.objects.filter(genero = 'M').count()
@@ -87,16 +91,19 @@ def dashboard(request):
                    })
 
 """Mostrar as informações do aluno"""
+@login_required(login_url='/login/')
 def mostrar(request, id):
     aluno = Alunos.objects.get(id = id)
     return render(request, 'aluno/mostrar.html', {'aluno' : aluno})
 
 """Editar e Actualizar dados do aluno"""
+@login_required(login_url='/login/')
 def editar(request, id):
     aluno = Alunos.objects.get(id = id)
     form = EditeForm(instance = aluno)
     return render(request, 'aluno/edite.html', {'form' : form})
 
+@login_required(login_url='/login/')
 def actualizar(request, id):
     if request.method == 'POST':
         aluno = Alunos.objects.get(id = id)
@@ -116,6 +123,7 @@ def actualizar(request, id):
         return redirect(reverse('edite'))
 
 """Eliminar aluno"""
+@login_required(login_url='/login/')
 def delete(request, id):
     aluno = Alunos.objects.get(id=id)
     
@@ -131,9 +139,11 @@ def delete(request, id):
     return redirect(reverse('lista'))
 
 """Realizar busca de aluno pelo id ou nome"""
+@login_required(login_url='/login/')
 def abaBusca(request):
     return render(request,'aluno/busca.html')
 
+@login_required(login_url='/login/')
 def buscar(request):
     valorId = request.POST.get('buscaId')
     valorNome = request.POST.get('buscaNome')
@@ -161,11 +171,13 @@ def buscar(request):
     return render(request,'aluno/busca.html', {'aluno' : aluno})
 
 """Realizar Pagamentos de propinas"""
+@login_required(login_url='/login/')
 def propina_pagas(request, id):
     propinas = Propinas.objects.filter(aluno_id = id)
     aluno = Alunos.objects.get(id=id)
     return render(request, 'aluno/pagas.html', {'propinas' : propinas, 'aluno' : aluno})
 
+@login_required(login_url='/login/')
 def propina(request, id):
     aluno = Alunos.objects.get(id=id)
     ultimo = Propinas.objects.filter(aluno = aluno).order_by('-id').first()
@@ -173,6 +185,7 @@ def propina(request, id):
     mensali = mensal
     return render(request, 'aluno/propina.html', {'aluno' : aluno, 'ultimo' : ultimo, 'mensali' : mensali})
 
+@login_required(login_url='/login/')
 def pagar_propina(request):
     if request.method == 'POST':
         
@@ -220,6 +233,7 @@ def pagar_propina(request):
         return redirect(reverse('abaBusca'))
 
 """Realizar as buscas de alunos por turmas"""
+@login_required(login_url='/login/')
 def abaturmas(request):
     return render(request, 'aluno/turma.html')
 
@@ -237,6 +251,7 @@ def turmas(request):
         return render(request, 'aluno/turma.html')
 
 """Trazer todas as actividades que ocorrem no sistema"""
+@login_required(login_url='/login/')
 def movimentos(request):
     movimentos = Movimentos.objects.all()
     return render(request, 'aluno/movimentos.html', {'movimentos' : movimentos})
@@ -295,11 +310,13 @@ def login_users(request):
         form = LoginForm()
         return render(request, 'aluno/login.html', {'form' : form})
 
+@login_required(login_url='/login/')
 def logout_users(request):
     logout(request)
     return redirect('index')       
 
 """Preencher a tabela Salas"""
+@login_required(login_url='/login/')
 def criar_sala(request):
     Sala = [
         'Sala 1 - Enfermagem (Turma A)',
@@ -335,6 +352,7 @@ def criar_sala(request):
     return redirect(reverse('index'))
 
 """Preencher a tabela Cursos"""
+@login_required(login_url='/login/')
 def criar_curso(request):
     Tipo = [
         'Politécnico',
@@ -359,10 +377,12 @@ def criar_curso(request):
     return redirect(reverse('index'))
 
 """Registrando Mensalidades"""
+@login_required(login_url='/login/')
 def mensal(request):
     cursos = Cursos.objects.all()
     return render(request, 'aluno/mensal.html', {'cursos' : cursos})
 
+@login_required(login_url='/login/')
 def registro_mensalidade(request):
     if request.method == 'POST':
         form = MensalidadeForm(request.POST)
@@ -393,6 +413,7 @@ def registro_mensalidade(request):
         form = MensalidadeForm()
         return render(request, 'aluno/mensal.html')
     
+@login_required(login_url='/login/')
 def mensalidades(request):
     mensalidades = Mensalidade.objects.all()
 
@@ -416,11 +437,13 @@ def mensalidades(request):
     else:
         messages.error(request, 'Sem Mensalidades!')
         return redirect(reverse('menslidades'))
-    
+
+@login_required(login_url='/login/')
 def disciplina(request):
     form = DisciplinaForm()
     return render(request, 'aluno/disciplinas.html', {'form' : form})
 
+@login_required(login_url='/login/')
 def disciplinaSave(request):
     if request.method == 'POST':
         form = DisciplinaForm(request.POST)
@@ -443,11 +466,13 @@ def disciplinaSave(request):
         messages.warning(request, 'O formulário não foi enviado!')
         form = DisciplinaForm()
         return render(request, 'aluno/disciplinas.html', {'form' : form})
-    
+
+@login_required(login_url='/login/')
 def professor(request):
     disciplinas = Disciplinas.objects.all()
     return render(request, 'aluno/professores.html', {'disciplinas' : disciplinas})
 
+@login_required(login_url='/login/')
 def professorSave(request):
     if request.method == 'POST':
         form = ProfessorForm(request.POST)
@@ -473,12 +498,14 @@ def professorSave(request):
     else:
         return redirect(reverse('professor'))
     
+@login_required(login_url='/login/')
 def nota(request):
     professores = Professores.objects.all()
     alunos = Alunos.objects.all()
     disciplinas = Disciplinas.objects.all()
     return render(request, 'aluno/notas.html', {'professores' : professores, 'alunos' : alunos, 'disciplinas' : disciplinas})
 
+@login_required(login_url='/login/')
 def notaSave(request):
     if request.method == 'POST':
         form = NotaForm(request.POST)
@@ -505,10 +532,12 @@ def notaSave(request):
     else:
         return redirect(reverse('professor'))
     
+@login_required(login_url='/login/')
 def financa(request):
     pagos = Pagamentos.objects.all()
     return render(request,'aluno/financa.html', {'pagos' : pagos})
     
+@login_required(login_url='/login/')
 def pagamentos(request):
     totalpagos = Pagamentos.objects.aggregate(total = Sum('valor'))['total']
     propinas = Pagamentos.objects.filter(tipo='Propina').aggregate(prop = Sum('valor'))['prop']
@@ -521,6 +550,7 @@ def pagamentos(request):
                   }
                   )
 
+@login_required(login_url='/login/')
 def verNotas(request, id):
     notas = Notas.objects.filter(aluno_id=id)
     aluno = Alunos.objects.get(id=id)

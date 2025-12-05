@@ -48,7 +48,7 @@
         
     {% else %}
 
-        <form action="{% url 'novo_aluno' %}" method="post" class="form" style="height: 100vh;">
+        <form action="{% url 'novo_aluno' %}" method="post" class="form" style="height: 100vh; width: 65%;">
             {% csrf_token %}
 
             {{ form.as_p }}

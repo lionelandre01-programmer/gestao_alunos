@@ -57,7 +57,6 @@ main{
     min-width: 80%;
     margin-left: 1%;
     min-height: 83vh;
-    margin-top: 15vh;
 }
 
 aside{
@@ -95,13 +94,14 @@ aside{
 
 table{
     border-collapse: collapse;
-    width: 53em;
+    width: 63em;
     color: aliceblue;
     height: auto;
 }
 
 td, th{
     border: 1px solid black;
+    height: 35px;
 }
 
 td{
@@ -126,6 +126,17 @@ th{
     border-radius: 15px;
     color: aliceblue;
     margin-bottom: 10px;
+}
+
+.indexe{
+    width: 80%;
+    height: 50vh;
+    background: linear-gradient(97deg, aqua, aqua, black, black);
+    border: 1px solid skyblue ;
+    border-radius: 15px;
+    color: aliceblue;
+    margin-bottom: 10px;
+    overflow: hidden;
 }
 
 .form input{
@@ -323,4 +334,45 @@ th{
 
 .informa h4 span{
     color: goldenrod;
+}
+
+.div-busca{
+    width: 85%;
+    height: 60%;
+    right: 0;
+    top: 15vh;
+    position: absolute;
+    background-image: url('img/busca.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    padding: 10% 0;
+    border-bottom-left-radius: 60%;
+    border-bottom-right-radius: 60%;
+}
+
+.form-turma{
+    background: gray;
+    top: 14vh;
+    left: 190px;
+    position: absolute;
+    border: 2px solid black;
+    width: 40%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    align-items: center;
+    background-color: rgb(90, 89, 89); padding: 15px;
+    border-bottom-left-radius: 40%;
+    border-bottom-right-radius: 40%;
+    overflow: hidden;
+}
+
+.form-turma label{
+    width: 90%;
+    text-align: start;
 }
