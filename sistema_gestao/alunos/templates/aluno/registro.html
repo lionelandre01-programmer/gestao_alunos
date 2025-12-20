@@ -13,7 +13,7 @@
 {% endif %}
 
     <div class="page">
-        <h1 style="color: aquamarine;">CADASTRAR FUNCIONÁRIO</h1>
+        <h1 style="color: rgb(148, 114, 4);">CADASTRAR FUNCIONÁRIO</h1>
     </div>
 
     <form action="{% url 'registro.post' %}" method="post" class="form" style="height: 100vh; gap: 10px;">
@@ -30,6 +30,17 @@
         
         <label for="password1">Palavra-Passe</label>
         <input type="password" name="password1" id="password1" placeholder="defina uma palavra-passe com mínimo de 8 dígitos" required>
+
+        {% if grupos %}
+        <label for="grupo">Grupo</label>
+        <select name="grupo" id="grupo" class="genero">
+            
+            {% for grupo in grupos %}
+                <option value="{{ grupo.id }}">{{ grupo.name }}</option>
+            {% endfor %}
+            
+        </select>
+        {% endif %}
         
         <label for="password2">Confirme a Palavra-Passe</label>
         <input type="password" name="password2" id="password2" placeholder="Insira novamente a palavra-passe" required>

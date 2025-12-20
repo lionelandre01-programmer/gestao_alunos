@@ -148,8 +148,9 @@ class Pagamentos(models.Model):
         ('Matrícula','Matrícula'),
         ('Confirmação','Confirmação'),
         ('Propina','Propina'),
-        ('Prova','Prova'),
-        ('Uniforme','Uniforme'),
+        ('Folha de Prova','Folha de Prova'),
+        ('Uniforme Escolar','Uniforme Escolar'),
+        ('Uniforme de Ed. Física','Uniforme de Ed. Física'),
         ('Cartão','Cartão'),
         ('Estágio','Estágio')
     ]
@@ -159,4 +160,3 @@ class Pagamentos(models.Model):
     valor = models.DecimalField(max_digits=10, decimal_places=2)
     funcionario = models.CharField(max_length=50)
     registrado = models.DateTimeField(auto_now_add=True)
-

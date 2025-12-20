@@ -29,12 +29,14 @@
         <aside>
             {% if request.user.is_authenticated %}
             <ul class="aside-lista">
-                <button><li><a href="{% url 'index' %}">Inicio</a></li></button>
+                <button><li><a href="{% url 'index' %}" style="color: aliceblue; font-size: 25px;">Inicio</a></li></button>
                 <button><li><a href="{% url 'dashboard' %}">DashBoard</a></li></button>
                 <button><li><a href="{% url 'abaBusca' %}">Pesquisar</a></li></button>
                 <button><li><a href="{% url 'lista' %}">Alunos</a></li></button>
                 <button><li><a href="{% url 'mensalidade' %}">Mensalidade</a></li></button>
+                {% if perms.view_movimento %}
                 <button><li><a href="{% url 'movimento' %}">Movimentos</a></li></button>
+                {% endif %}
                 <button><li><a href="{% url 'disciplina' %}">Disciplinas</a></li></button>
                 <button><li><a href="{% url 'professor' %}">Professores</a></li></button>
                 <button><li><a href="{% url 'nota' %}">Notas</a></li></button>

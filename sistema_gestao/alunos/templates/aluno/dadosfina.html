@@ -8,23 +8,23 @@
         <a href="{% url 'financa' %}" style="color: black;">Movimentos Financeiros</a>
     </button>
 
-    <div class="page" style="width: auto; align-self: start; margin: 20px;">
-        <h1 style="color: aquamarine;">ESTATÍSTICAS FINANCEIRAS</h1>
+    <div class="page">
+        <h1 style="color: rgb(148, 114, 4);">ESTATÍSTICAS FINANCEIRAS</h1>
     </div>
 
-<div class="totals">
+<div class="totalfundo">
     <div class="totalgreen">
         <h1>Total De Fundo</h1>
         <h2>{{ totalpagos | floatformat:2 }}kz</h2>
     </div>
 
-    <div class="totalyellow" style="height: auto; padding: 10px 0;">
-        <h1>Total de Propinas</h1>
+    <div class="totalyellow">
+        <h1 style="color: red;">Total de Propinas</h1>
         <h2>{{ propinas | floatformat:2 }}kz</h2>
     </div>
 
     <div class="totalred">
-        <h1>Total De Outros</h1>
+        <h1 style="color: yellow;">Total De Outros</h1>
         <h2>{{ outros | floatformat:2 }}kz</h2>
     </div>
 </div>

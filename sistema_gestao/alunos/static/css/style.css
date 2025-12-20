@@ -57,6 +57,7 @@ main{
     min-width: 80%;
     margin-left: 1%;
     min-height: 83vh;
+    margin-top: 10px;
 }
 
 aside{
@@ -229,7 +230,12 @@ th{
 
 .page{
     width: 60%;
+    background:linear-gradient(97deg, rgb(2, 184, 175), rgb(2, 184, 175), transparent) ;
     text-align: start;
+    border-radius: 10px; 
+    align-self: start; 
+    margin: 20px 50px; 
+    padding: 20px;
 }
 
 .totals{
@@ -375,4 +381,42 @@ th{
 .form-turma label{
     width: 90%;
     text-align: start;
+}
+
+.totalfundo{
+    display: flex;
+    flex-wrap: wrap;
+    height: 35vh;
+    width: 70vw;
+    border: 1px solid black;
+    border-top-left-radius: 40%;
+    border-top-right-radius: 40%;
+    overflow: hidden;
+}
+
+.totalfundo .totalgreen{
+    width: 100%;
+    height: 50%;
+    background: green;
+    padding: 15px 5px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.totalfundo .totalyellow{
+    width: 50%;
+    height: 50%;
+    background: yellow;
+    padding: 15px 5px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.totalfundo .totalred{
+    width: 50%;
+    height: 50%;
+    background: red;
+    padding: 15px 5px;
+    border-radius: 5px;
+    text-align: center;
 }
