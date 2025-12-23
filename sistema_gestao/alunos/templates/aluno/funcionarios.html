@@ -1,0 +1,38 @@
+{% extends 'aluno/layout/base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+    <div class="page" style="margin-top: 20px;">
+        <h1 style="color: rgb(148, 114, 4);">INFORMAÇÕES DO FUNCIONÁRIO</h1>
+    </div>
+
+    <div class="detalhes">
+        <div class="foto">
+            <img src="{% static 'css/img/Passe.png' %}" alt="erro" class="passe">
+        </div>
+
+        <div class="informa">
+            <h4>Nome: <span>{{ usuario.nome }}</span></h4>
+            <h4>Nome de Usuário: <span>{{ usuario.username }}</span></h4>
+            <h4>E-Mail: <span>{{ usuario.email }}</span></h4>
+            <h4>Data de Contratação: <span>{{ usuario.date_joined | date:'d/m/Y'}}</span></h4>
+            <h4>Última Vez Online: <span>{{ usuario.last_login | date:'d/m/Y h:i'}}</span></h4>
+        </div>
+
+        <div style="height: 6vh; display: flex; width: 100%; gap: 20px;">
+            <button style="background: gainsboro; width: 40%; height: 100%;
+            border: 2px solid aliceblue; border-radius: 10px; background: rgb(0, 162, 255);">
+                <a href="{% url 'index' %}" style="color: black;">Voltar</a>
+            </button>
+
+            <button style="background: gainsboro; width: 40%; height: 100%;
+            border: 2px solid aliceblue; border-radius: 10px; background: rgb(0, 162, 255);">
+                <a href="{% url 'proximo_funcionario' usuario.id %}" style="color: black;">Próximo</a>
+            </button>
+        </div>
+    </div>
+
+
+{% endblock %}

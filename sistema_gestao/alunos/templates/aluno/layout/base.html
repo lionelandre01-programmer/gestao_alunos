@@ -18,9 +18,9 @@
                     <button onclick="return confirm('Deseja Sair?')" 
                     style="height: 25px; width: 75px; display: flex; justify-content: space-evenly; align-items: center; border-radius: 5px;">
                         <li><a href="{% url 'logout' %}" style="color: black;">Logout</a></li></button>
+                        <li><a href="{% url 'registro' %}">Sign Up</a></li>
                     {% else %}
-                    <li><a href="{% url 'registro' %}">Sign Up</a></li>
-                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <h2><li><a href="{% url 'login' %}">Login</a></li></h2>
                     {% endif %}
                 </ul>
             </nav>
@@ -41,6 +41,7 @@
                 <button><li><a href="{% url 'professor' %}">Professores</a></li></button>
                 <button><li><a href="{% url 'nota' %}">Notas</a></li></button>
                 <button><li><a href="{% url 'dadosfina' %}">Finanças</a></li></button>
+                <button><li><a href="{% url 'funcionario' 1 %}">Funcionários</a></li></button>
             </ul>
             {% endif %}
         </aside>

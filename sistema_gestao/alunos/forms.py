@@ -159,13 +159,15 @@ class EditeForm(forms.ModelForm):
 class RegistroForm(UserCreationForm):
     class Meta:
         model = Usuario
-        fields = ['username', 'email', 'nome', 'password1', 'password2']
+        fields = ['username', 'email', 'first_name', 'last_name', 'is_superuser', 'password1', 'password2']
 
     def __init__(self, *args, **kwargs):
         super(RegistroForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update()
         self.fields['email'].widget.attrs.update()
-        self.fields['nome'].widget.attrs.update()
+        self.fields['first_name'].widget.attrs.update()
+        self.fields['last_name'].widget.attrs.update()
+        self.fields['is_superuser'].widget.attrs.update()
         self.fields['password1'].widget.attrs.update()
         self.fields['password2'].widget.attrs.update()
 

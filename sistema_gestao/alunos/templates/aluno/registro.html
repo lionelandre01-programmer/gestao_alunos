@@ -2,25 +2,28 @@
 
 {% block content %}
 
-{% if erros %}
+    {% if erros %}
 
-    {% for campo, erro in erros.items %}
-        <div style="width: 50%; height: auto; background-color: rgb(253, 27, 27); margin: 20px; border-radius: 10px; padding: 20px;">
-            <h4 style="text-align: center;">{{ campo }}: {{ erro }}</h4>
-        </div>
-    {% endfor %}
-            
-{% endif %}
+        {% for campo, erro in erros.items %}
+            <div style="width: 50%; height: auto; background-color: rgb(253, 27, 27); margin: 20px; border-radius: 10px; padding: 20px;">
+                <h4 style="text-align: center;">{{ campo }}: {{ erro }}</h4>
+            </div>
+        {% endfor %}
+                
+    {% endif %}
 
     <div class="page">
         <h1 style="color: rgb(148, 114, 4);">CADASTRAR FUNCIONÁRIO</h1>
     </div>
 
-    <form action="{% url 'registro.post' %}" method="post" class="form" style="height: 100vh; gap: 10px;">
+    <form action="{% url 'registro.post' %}" method="post" class="form" style="height: 110vh; gap: 10px;">
         {% csrf_token %}
 
-        <label for="nome">Nome Completo</label>
-        <input type="text" id="nome" name="nome" placeholder="Insira seu Nome Completo" required>
+        <label for="first_name">Nome:</label>
+        <input type="text" id="first_name" name="first_name" placeholder="Insira seu Nome" required>
+
+        <label for="last_name">Sobrenome</label>
+        <input type="text" id="last_name" name="last_name" placeholder="Insira seu Sobrenome" required>
         
         <label for="username">Nome De Usuário</label>
         <input type="text" name="username" id="username" placeholder="Defina seu nome de usuário" required>
@@ -28,8 +31,15 @@
         <label for="email">E-Mail</label>
         <input type="email" name="email" id="email" placeholder="Seu endereço de e-mail" required>
         
-        <label for="password1">Palavra-Passe</label>
-        <input type="password" name="password1" id="password1" placeholder="defina uma palavra-passe com mínimo de 8 dígitos" required>
+        {% if superuser %}
+            <input type="hidden" value="0" readonly>
+        {% else %}
+            <label for="superuser">É Super Usuário?</label>
+            <select name="grupo" id="grupo" class="genero">
+                <option value="0">Não Sou um Super Usuário</option>
+                <option value="1">Sim, Sou um Super Usuário</option>
+            </select>
+        {% endif %}
 
         {% if grupos %}
         <label for="grupo">Grupo</label>
@@ -41,7 +51,10 @@
             
         </select>
         {% endif %}
-        
+
+        <label for="password1">Palavra-Passe</label>
+        <input type="password" name="password1" id="password1" placeholder="defina uma palavra-passe com mínimo de 8 dígitos" required>
+
         <label for="password2">Confirme a Palavra-Passe</label>
         <input type="password" name="password2" id="password2" placeholder="Insira novamente a palavra-passe" required>
 

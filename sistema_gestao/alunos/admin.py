@@ -25,70 +25,70 @@ def grupos():
     content_type_movimento = ContentType.objects.get_for_model(Movimentos)
 
     """Permissões em alunos"""
-    add_aluno = Permission.objects.get(codename='add_alunos', content_type=content_type_aluno)
-    change_aluno = Permission.objects.get(codename='change_alunos', content_type=content_type_aluno)
-    view_aluno = Permission.objects.get(codename='view_alunos', content_type=content_type_aluno)
-    delete_aluno = Permission.objects.get(codename='delete_alunos', content_type=content_type_aluno)
+    add_aluno, aluno1 = Permission.objects.get_or_create(codename='add_alunos', content_type=content_type_aluno)
+    change_aluno, aluno2 = Permission.objects.get_or_create(codename='change_alunos', content_type=content_type_aluno)
+    view_aluno, aluno3 = Permission.objects.get_or_create(codename='view_alunos', content_type=content_type_aluno)
+    delete_aluno, aluno4 = Permission.objects.get_or_create(codename='delete_alunos', content_type=content_type_aluno)
 
     """Permissões em pagamentos"""
-    add_pagamento = Permission.objects.get(codename='add_pagamentos', content_type=content_type_pagamento)
-    change_pagamento = Permission.objects.get(codename='change_pagamentos', content_type=content_type_pagamento)
-    view_pagamento = Permission.objects.get(codename='view_pagamentos', content_type=content_type_pagamento)
-    delete_pagamento = Permission.objects.get(codename='delete_pagamentos', content_type=content_type_pagamento)
+    add_pagamento, pagamento1 = Permission.objects.get_or_create(codename='add_pagamentos', content_type=content_type_pagamento)
+    change_pagamento, pagamento2 = Permission.objects.get_or_create(codename='change_pagamentos', content_type=content_type_pagamento)
+    view_pagamento, pagamento3 = Permission.objects.get_or_create(codename='view_pagamentos', content_type=content_type_pagamento)
+    delete_pagamento, pagamento4 = Permission.objects.get_or_create(codename='delete_pagamentos', content_type=content_type_pagamento)
 
     """Permissões em professores"""
-    add_professor = Permission.objects.get(codename='add_professores', content_type=content_type_professor)
-    change_professor = Permission.objects.get(codename='change_professores', content_type=content_type_professor)
-    view_professor = Permission.objects.get(codename='view_professores', content_type=content_type_professor)
-    delete_professor = Permission.objects.get(codename='delete_professores', content_type=content_type_professor)
+    add_professor, professor1 = Permission.objects.get_or_create(codename='add_professores', content_type=content_type_professor)
+    change_professor, professor1 = Permission.objects.get_or_create(codename='change_professores', content_type=content_type_professor)
+    view_professor, professor1 = Permission.objects.get_or_create(codename='view_professores', content_type=content_type_professor)
+    delete_professor, professor1 = Permission.objects.get_or_create(codename='delete_professores', content_type=content_type_professor)
 
     """Permissões em cursos"""
-    add_curso = Permission.objects.get(codename='add_cursos', content_type=content_type_curso)
-    change_curso = Permission.objects.get(codename='change_cursos', content_type=content_type_curso)
-    view_curso = Permission.objects.get(codename='view_cursos', content_type=content_type_curso)
-    delete_curso = Permission.objects.get(codename='delete_cursos', content_type=content_type_curso)
+    add_curso, curso1 = Permission.objects.get_or_create(codename='add_cursos', content_type=content_type_curso)
+    change_curso, curso2 = Permission.objects.get_or_create(codename='change_cursos', content_type=content_type_curso)
+    view_curso, curso3 = Permission.objects.get_or_create(codename='view_cursos', content_type=content_type_curso)
+    delete_curso, curso4 = Permission.objects.get_or_create(codename='delete_cursos', content_type=content_type_curso)
 
     """Permissões em salas"""
-    add_sala = Permission.objects.get(codename='add_salas', content_type=content_type_sala)
-    change_sala = Permission.objects.get(codename='change_salas', content_type=content_type_sala)
-    view_sala = Permission.objects.get(codename='view_salas', content_type=content_type_sala)
-    delete_sala = Permission.objects.get(codename='delete_salas', content_type=content_type_sala)
+    add_sala, sala1 = Permission.objects.get_or_create(codename='add_salas', content_type=content_type_sala)
+    change_sala, sala2 = Permission.objects.get_or_create(codename='change_salas', content_type=content_type_sala)
+    view_sala, sala3 = Permission.objects.get_or_create(codename='view_salas', content_type=content_type_sala)
+    delete_sala, sala4 = Permission.objects.get_or_create(codename='delete_salas', content_type=content_type_sala)
 
     """Permissões em usuarios"""
-    add_usuario = Permission.objects.get(codename='add_usuario', content_type=content_type_usuario)
-    change_usuario = Permission.objects.get(codename='change_usuario', content_type=content_type_usuario)
-    view_usuario = Permission.objects.get(codename='view_usuario', content_type=content_type_usuario)
-    delete_usuario = Permission.objects.get(codename='delete_usuario', content_type=content_type_usuario)
+    add_usuario, usuario1 = Permission.objects.get_or_create(codename='add_usuario', content_type=content_type_usuario)
+    change_usuario, usuario2 = Permission.objects.get_or_create(codename='change_usuario', content_type=content_type_usuario)
+    view_usuario, usuario3 = Permission.objects.get_or_create(codename='view_usuario', content_type=content_type_usuario)
+    delete_usuario, usuario4 = Permission.objects.get_or_create(codename='delete_usuario', content_type=content_type_usuario)
 
     """Permissão em mensalidades"""
-    add_mensalidade = Permission.objects.get(codename='add_mensalidade', content_type=content_type_mensalidade)
-    change_mensalidade = Permission.objects.get(codename='change_mensalidade', content_type=content_type_mensalidade)
-    view_mensalidade = Permission.objects.get(codename='view_mensalidade', content_type=content_type_mensalidade)
-    delete_mensalidade = Permission.objects.get(codename='delete_mensalidade', content_type=content_type_mensalidade)
+    add_mensalidade, mensalidade1 = Permission.objects.get_or_create(codename='add_mensalidade', content_type=content_type_mensalidade)
+    change_mensalidade, mensalidade2 = Permission.objects.get_or_create(codename='change_mensalidade', content_type=content_type_mensalidade)
+    view_mensalidade, mensalidade3 = Permission.objects.get_or_create(codename='view_mensalidade', content_type=content_type_mensalidade)
+    delete_mensalidade, mensalidade4 = Permission.objects.get_or_create(codename='delete_mensalidade', content_type=content_type_mensalidade)
 
     """Permissão em disciplina"""
-    add_disciplina = Permission.objects.get(codename='add_disciplinas', content_type=content_type_disciplina)
-    change_disciplina = Permission.objects.get(codename='change_disciplinas', content_type=content_type_disciplina)
-    view_disciplina = Permission.objects.get(codename='view_disciplinas', content_type=content_type_disciplina)
-    delete_disciplina = Permission.objects.get(codename='delete_disciplinas', content_type=content_type_disciplina)
+    add_disciplina, propina1 = Permission.objects.get_or_create(codename='add_disciplinas', content_type=content_type_disciplina)
+    change_disciplina, propina2 = Permission.objects.get_or_create(codename='change_disciplinas', content_type=content_type_disciplina)
+    view_disciplina, propina3 = Permission.objects.get_or_create(codename='view_disciplinas', content_type=content_type_disciplina)
+    delete_disciplina, propina4 = Permission.objects.get_or_create(codename='delete_disciplinas', content_type=content_type_disciplina)
 
     """Permissão em notas"""
-    add_nota = Permission.objects.get(codename='add_notas', content_type=content_type_nota)
-    change_nota = Permission.objects.get(codename='change_notas', content_type=content_type_nota)
-    view_nota = Permission.objects.get(codename='view_notas', content_type=content_type_nota)
-    delete_nota = Permission.objects.get(codename='delete_notas', content_type=content_type_nota)
+    add_nota, nota1 = Permission.objects.get_or_create(codename='add_notas', content_type=content_type_nota)
+    change_nota, nota2 = Permission.objects.get_or_create(codename='change_notas', content_type=content_type_nota)
+    view_nota, nota3 = Permission.objects.get_or_create(codename='view_notas', content_type=content_type_nota)
+    delete_nota, nota4 = Permission.objects.get_or_create(codename='delete_notas', content_type=content_type_nota)
 
     """Permissões em propina"""
-    add_propina = Permission.objects.get(codename='add_propinas', content_type=content_type_propina)
-    change_propina = Permission.objects.get(codename='change_propinas', content_type=content_type_propina)
-    view_propina = Permission.objects.get(codename='view_propinas', content_type=content_type_propina)
-    delete_propina = Permission.objects.get(codename='delete_propinas', content_type=content_type_propina)
+    add_propina, disciplina1 = Permission.objects.get_or_create(codename='add_propinas', content_type=content_type_propina)
+    change_propina, disciplina2 = Permission.objects.get_or_create(codename='change_propinas', content_type=content_type_propina)
+    view_propina, disciplina3 = Permission.objects.get_or_create(codename='view_propinas', content_type=content_type_propina)
+    delete_propina, disciplina4 = Permission.objects.get_or_create(codename='delete_propinas', content_type=content_type_propina)
 
     """Permissões em movimentos"""
-    add_movimento = Permission.objects.get(codename='add_movimentos', content_type=content_type_movimento)
-    change_movimento = Permission.objects.get(codename='change_movimentos', content_type=content_type_movimento)
-    view_movimento = Permission.objects.get(codename='view_movimentos', content_type=content_type_movimento)
-    delete_movimento = Permission.objects.get(codename='delete_movimentos', content_type=content_type_movimento)
+    add_movimento, movimento1 = Permission.objects.get_or_create(codename='add_movimentos', content_type=content_type_movimento)
+    change_movimento, movimento2 = Permission.objects.get_or_create(codename='change_movimentos', content_type=content_type_movimento)
+    view_movimento, movimento3 = Permission.objects.get_or_create(codename='view_movimentos', content_type=content_type_movimento)
+    delete_movimento, movimento4 = Permission.objects.get_or_create(codename='delete_movimentos', content_type=content_type_movimento)
 
     """Atribuindo permissões por grupo"""
     """Administradores"""

@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.urls import reverse
 from .models import Alunos, Professores, Disciplinas
 from .models import Salas, Mensalidade, Pagamentos
-from .models import Cursos, Notas
+from .models import Cursos, Notas, Usuario
 from .forms import Formulario_Cadastro, MensalidadeForm, DisciplinaForm
 from .forms import EditeForm, RegistroForm, LoginForm, ProfessorForm, NotaForm
 from django.contrib.auth import login, authenticate, logout
@@ -24,22 +24,36 @@ def index(request):
     return render(request, 'aluno/index.html', {'sala' : sala, 'curso' : curso})
 
 @login_required(login_url='/login/')
-@permission_required('view_aluno')
 def lista(request):
-    aluno = Alunos.objects.all()
-    return render(request, 'aluno/lista.html', {'aluno' : aluno})
+    grupo = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo:
+        aluno = Alunos.objects.all()
+        return render(request, 'aluno/lista.html', {'aluno' : aluno})
+    else:
+        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
 
 """Cadastrando um novo aluno"""
 @login_required(login_url='/login/')
-@permission_required('add_aluno')
 def cadastro(request):
-    form = Formulario_Cadastro()
-    return render(request, 'aluno/cadastro.html', {'form' : form})
+    grupo = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo:
+        form = Formulario_Cadastro()
+        return render(request, 'aluno/cadastro.html', {'form' : form})
+    else:
+        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
+    
 
 @login_required(login_url='/login/')
 def novo_aluno(request):
     if request.method == 'POST':
-        if request.user.has_perm('add_aluno'):
+        grupo = Group.objects.get(id=4)
+        group_auth = request.user.groups.first()
+
+        if group_auth != grupo:
             form = Formulario_Cadastro(request.POST)
             if form.is_valid():
                 nome = form.cleaned_data['nome']
@@ -71,53 +85,76 @@ def novo_aluno(request):
    
 """DashBoard Do Sistema"""
 @login_required(login_url='/login/')
-@permission_required('view_aluno')
 def dashboard(request):
-    total = Alunos.objects.count()
-    masculino = Alunos.objects.filter(genero = 'M').count()
-    feminino = Alunos.objects.filter(genero = 'F').count()
-    alunosEnfe = Alunos.objects.filter(curso = 6).count()
-    alunosCont = Alunos.objects.filter(curso = 3).count()
-    alunosProg = Alunos.objects.filter(curso = 1).count()
-    alunosGE = Alunos.objects.filter(curso = 4).count()
-    alunosElec = Alunos.objects.filter(curso = 5).count()
-    alunosInfo = Alunos.objects.filter(curso = 2).count()
-    alunosMa = Alunos.objects.filter(turno = 'Manhã').count()
-    alunosTa = Alunos.objects.filter(turno = 'Tarde').count()
-    
-    return render(request, 'aluno/dashboard.html', 
-                  {'total' : total, 
-                   'totalM' : masculino, 
-                   'totalF' : feminino, 
-                   'totalEnfe' : alunosEnfe, 
-                   'totalCont' : alunosCont, 
-                   'totalProg' : alunosProg,
-                   'totalGE' : alunosGE, 
-                   'totalElec' : alunosElec, 
-                   'totalInfo' : alunosInfo,
-                   'totalMa' : alunosMa,
-                   'totalTa' : alunosTa
-                   })
+    grupo = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo:
+        total = Alunos.objects.count()
+        masculino = Alunos.objects.filter(genero = 'M').count()
+        feminino = Alunos.objects.filter(genero = 'F').count()
+        alunosEnfe = Alunos.objects.filter(curso = 6).count()
+        alunosCont = Alunos.objects.filter(curso = 3).count()
+        alunosProg = Alunos.objects.filter(curso = 1).count()
+        alunosGE = Alunos.objects.filter(curso = 4).count()
+        alunosElec = Alunos.objects.filter(curso = 5).count()
+        alunosInfo = Alunos.objects.filter(curso = 2).count()
+        alunosMa = Alunos.objects.filter(turno = 'Manhã').count()
+        alunosTa = Alunos.objects.filter(turno = 'Tarde').count()
+        
+        return render(request, 'aluno/dashboard.html', 
+                    {'total' : total, 
+                    'totalM' : masculino, 
+                    'totalF' : feminino, 
+                    'totalEnfe' : alunosEnfe, 
+                    'totalCont' : alunosCont, 
+                    'totalProg' : alunosProg,
+                    'totalGE' : alunosGE, 
+                    'totalElec' : alunosElec, 
+                    'totalInfo' : alunosInfo,
+                    'totalMa' : alunosMa,
+                    'totalTa' : alunosTa
+                    })
+    else:
+         return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
 
 """Mostrar as informações do aluno"""
 @login_required(login_url='/login/')
-@permission_required('view_aluno')
 def mostrar(request, id):
-    aluno = Alunos.objects.get(id = id)
-    return render(request, 'aluno/mostrar.html', {'aluno' : aluno})
+    grupo = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo:
+        aluno = Alunos.objects.get(id = id)
+        return render(request, 'aluno/mostrar.html', {'aluno' : aluno})
+    else:
+        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
+    
 
 """Editar e Actualizar dados do aluno"""
 @login_required(login_url='/login/')
 @permission_required('change_aluno')
 def editar(request, id):
-    aluno = Alunos.objects.get(id = id)
-    form = EditeForm(instance = aluno)
-    return render(request, 'aluno/edite.html', {'form' : form})
+    grupo_secret = Group.objects.get(id=3)
+    grupo_prof = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo_secret and group_auth != grupo_prof:
+        aluno = Alunos.objects.get(id = id)
+        form = EditeForm(instance = aluno)
+        return render(request, 'aluno/edite.html', {'form' : form})
+    else:
+        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
+
 
 @login_required(login_url='/login/')
 def actualizar(request, id):
     if request.method == 'POST':
-        if request.user.has_perm('change_aluno'):
+        grupo_secret = Group.objects.get(id=3)
+        grupo_prof = Group.objects.get(id=4)
+        group_auth = request.user.groups.first()
+
+        if group_auth != grupo_secret and group_auth != grupo_prof:
             aluno = Alunos.objects.get(id = id)
             form = EditeForm(request.POST, instance = aluno)
             if form.is_valid():
@@ -140,8 +177,11 @@ def actualizar(request, id):
 @login_required(login_url='/login/')
 def delete(request, id):
     aluno = Alunos.objects.get(id=id)
+    grupo_secret = Group.objects.get(id=3)
+    grupo_prof = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
 
-    if request.user.has_perm('delete_aluno'):
+    if group_auth != grupo_secret and group_auth != grupo_prof:
         if request.user.is_authenticated:
             Movimentos.objects.create(
             tipo = 'Aluno Deletado',
@@ -164,7 +204,6 @@ def abaBusca(request):
 
 @login_required(login_url='/login/')
 def buscar(request):
-    if request.user.has_perm('view_aluno'):
         valorId = request.POST.get('buscaId')
         valorNome = request.POST.get('buscaNome')
         if valorId:
@@ -189,9 +228,6 @@ def buscar(request):
                 return render(request,'aluno/busca.html', {'aluno' : aluno})
 
         return render(request,'aluno/busca.html', {'aluno' : aluno})
-    
-    else:
-        HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
 
 """Realizar Pagamentos de propinas"""
 @login_required(login_url='/login/')
@@ -199,21 +235,37 @@ def buscar(request):
 def propina_pagas(request, id):
     propinas = Propinas.objects.filter(aluno_id = id)
     aluno = Alunos.objects.get(id=id)
-    return render(request, 'aluno/pagas.html', {'propinas' : propinas, 'aluno' : aluno})
+    grupo_prof = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo_prof:
+        return render(request, 'aluno/pagas.html', {'propinas' : propinas, 'aluno' : aluno})
+    else:
+         return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
 
 @login_required(login_url='/login/')
 @permission_required('view_propina')
 def propina(request, id):
-    aluno = Alunos.objects.get(id=id)
-    ultimo = Propinas.objects.filter(aluno = aluno).order_by('-id').first()
-    mensal = Mensalidade.objects.get(curso_id=aluno.curso_id, classe=aluno.classe)
-    mensali = mensal
-    return render(request, 'aluno/propina.html', {'aluno' : aluno, 'ultimo' : ultimo, 'mensali' : mensali})
+    grupo_prof = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo_prof:
+        aluno = Alunos.objects.get(id=id)
+        ultimo = Propinas.objects.filter(aluno = aluno).order_by('-id').first()
+        mensal = Mensalidade.objects.get(curso_id=aluno.curso_id, classe=aluno.classe)
+        mensali = mensal
+        return render(request, 'aluno/propina.html', {'aluno' : aluno, 'ultimo' : ultimo, 'mensali' : mensali})
+        
+    else:
+         return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
 
 @login_required(login_url='/login/')
 def pagar_propina(request):
     if request.method == 'POST':
-        if request.user.has_perm('add_propina'):
+        grupo_prof = Group.objects.get(id=4)
+        group_auth = request.user.groups.first()
+
+        if group_auth != grupo_prof:
         
             id = request.POST.get('aluno')
             mes = request.POST.get('mes')
@@ -262,13 +314,15 @@ def pagar_propina(request):
 
 """Realizar as buscas de alunos por turmas"""
 @login_required(login_url='/login/')
-@permission_required('view_aluno')
 def abaturmas(request):
     return render(request, 'aluno/turma.html')
 
 @login_required(login_url='/login/')
 def turmas(request):
-    if request.user.has_perm('view_aluno'):
+    grupo_prof = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo_prof:
         classe = request.POST.get('classe')
         turma = request.POST.get('turma')
         turno = request.POST.get('turno')
@@ -285,27 +339,44 @@ def turmas(request):
 
 """Trazer todas as actividades que ocorrem no sistema"""
 @login_required(login_url='/login/')
-@permission_required('view_movimento')
 def movimentos(request):
-    movimentos = Movimentos.objects.all()
-    return render(request, 'aluno/movimentos.html', {'movimentos' : movimentos})
+    grupo_admin = Group.objects.get(id=1)
+    group_auth = request.user.groups.first()
+
+    if group_auth == grupo_admin:
+        movimentos = Movimentos.objects.all()
+        return render(request, 'aluno/movimentos.html', {'movimentos' : movimentos})
+    else:
+         return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
+    
 
 """Cadastro de um funcionário"""
 def abaRegistro(request):
-    
-    grupos = Group.objects.exclude(name='Administradores')
+    if Usuario.objects.count() != 0:
+        if request.user.is_authenticated:
+            superuser = Usuario.objects.filter(is_superuser=1).exists()
+            grupos = Group.objects.exclude(name='Administradores')
+        else:
+            return redirect(reverse('login'))
+    else:
+        superuser = False
+        grupos = Group.objects.all()
     form = RegistroForm()
-    return render(request, 'aluno/registro.html', {'form' : form, 'grupos' : grupos})
+    return render(request, 'aluno/registro.html', {'form' : form, 'grupos' : grupos, 'superuser' : superuser})
 
 def registro(request):
     if request.method == 'POST':
         grupo = request.POST.get('grupo')
+        firstName = request.POST.get('first_name')
+        lastName = request.POST.get('last_name')
         form = RegistroForm(request.POST)
         if form.is_valid():
-            nome = form.cleaned_data['nome']
             user = form.save()
             group = Group.objects.get(id=grupo)
             user.groups.add(group)
+            user.nome = firstName+' '+lastName
+            user.save()
+            nome = user.nome
 
             if request.user.is_authenticated:
                 Movimentos.objects.create(
@@ -313,6 +384,7 @@ def registro(request):
                 Aluno = nome,
                 funcionario = request.user.nome
                 )
+                return redirect(reverse('index'))
 
             return redirect(reverse('login'))
         
@@ -362,7 +434,11 @@ def logout_users(request):
 """Preencher a tabela Salas"""
 @login_required(login_url='/login/')
 def criar_sala(request):
-    if request.user.has_perm('add_sala'):
+    
+    grupo_admin = Group.objects.get(id=1)
+    group_auth = request.user.groups.first()
+
+    if group_auth == grupo_admin:
         Sala = [
             'Sala 1 - Enfermagem (Turma A)',
             'Sala 2 - Programação (Turma A)',
@@ -396,12 +472,15 @@ def criar_sala(request):
         messages.success(request, 'Salas criadas com sucesso!')
         return redirect(reverse('index'))
     else:
-        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
+        return HttpResponseForbidden('<h1>Apenas O Administrador é autorizado Para prosseguir na Execução de Tal Acção</h1>')
 
 """Preencher a tabela Cursos"""
 @login_required(login_url='/login/')
 def criar_curso(request):
-    if request.user.has_perm('add_curso'):
+    grupo_admin = Group.objects.get(id=1)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo_admin:
         Tipo = [
             'Politécnico',
             'Saúde'
@@ -424,19 +503,27 @@ def criar_curso(request):
         messages.success(request, 'Cursos criados com sucesso!')
         return redirect(reverse('index'))
     else:
-        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
+        return HttpResponseForbidden('<h1>Apenas o Administrador é autorizado Para prosseguir na Execução de Tal Acção</h1>')
 
 """Registrando Mensalidades"""
 @login_required(login_url='/login/')
-@permission_required('add_mensalidade')
 def mensal(request):
-    cursos = Cursos.objects.all()
-    return render(request, 'aluno/mensal.html', {'cursos' : cursos})
+    grupo_prof = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo_prof:
+        cursos = Cursos.objects.all()
+        return render(request, 'aluno/mensal.html', {'cursos' : cursos})
+    else:
+        return HttpResponseForbidden('<h1>Apenas Funcionários autorizados Podem Prosseguir com a Execução de Tal Acção</h1>')
 
 @login_required(login_url='/login/')
 def registro_mensalidade(request):
     if request.method == 'POST':
-        if request.user.has_perm('add_mensalidade'):
+        grupo_prof = Group.objects.get(id=4)
+        group_auth = request.user.groups.first()
+
+        if group_auth != grupo_prof:
             form = MensalidadeForm(request.POST)
 
             if form.is_valid():
@@ -468,41 +555,54 @@ def registro_mensalidade(request):
         return render(request, 'aluno/mensal.html')
     
 @login_required(login_url='/login/')
-@permission_required('view_mensalidade')
 def mensalidades(request):
-    mensalidades = Mensalidade.objects.all()
+    grupo_prof = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
 
-    if mensalidades:
-        prog = Mensalidade.objects.filter(curso_id=1)
-        info = Mensalidade.objects.filter(curso_id=2)
-        cont = Mensalidade.objects.filter(curso_id=3)
-        geEm = Mensalidade.objects.filter(curso_id=4)
-        elec = Mensalidade.objects.filter(curso_id=5)
-        enfe = Mensalidade.objects.filter(curso_id=6)
-        return render(request, 'aluno/mensalidades.html', {
-            'mensalidades' : mensalidades,
-            'prog' : prog,
-            'info' : info,
-            'cont' : cont,
-            'geEm' : geEm,
-            'elec' : elec,
-            'enfe' : enfe
-            })
-    
+    if group_auth != grupo_prof:
+        mensalidades = Mensalidade.objects.all()
+
+        if mensalidades:
+            prog = Mensalidade.objects.filter(curso_id=1)
+            info = Mensalidade.objects.filter(curso_id=2)
+            cont = Mensalidade.objects.filter(curso_id=3)
+            geEm = Mensalidade.objects.filter(curso_id=4)
+            elec = Mensalidade.objects.filter(curso_id=5)
+            enfe = Mensalidade.objects.filter(curso_id=6)
+            return render(request, 'aluno/mensalidades.html', {
+                'mensalidades' : mensalidades,
+                'prog' : prog,
+                'info' : info,
+                'cont' : cont,
+                'geEm' : geEm,
+                'elec' : elec,
+                'enfe' : enfe
+                })
+        
+        else:
+            messages.error(request, 'Sem Mensalidades!')
+            return redirect(reverse('menslidades'))
     else:
-        messages.error(request, 'Sem Mensalidades!')
-        return redirect(reverse('menslidades'))
+        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
 
 @login_required(login_url='/login/')
-@permission_required('add_disciplina')
 def disciplina(request):
-    form = DisciplinaForm()
-    return render(request, 'aluno/disciplinas.html', {'form' : form})
+    grupo_prof = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo_prof:
+        form = DisciplinaForm()
+        return render(request, 'aluno/disciplinas.html', {'form' : form})
+    else:
+        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
 
 @login_required(login_url='/login/')
 def disciplinaSave(request):
     if request.method == 'POST':
-        if request.user.has_perm('add_disciplina'):
+        grupo_prof = Group.objects.get(id=4)
+        group_auth = request.user.groups.first()
+
+        if group_auth != grupo_prof:
             form = DisciplinaForm(request.POST)
             if form.is_valid():
                 form.save()
@@ -527,15 +627,24 @@ def disciplinaSave(request):
         return render(request, 'aluno/disciplinas.html', {'form' : form})
 
 @login_required(login_url='/login/')
-@permission_required('add_professor')
 def professor(request):
-    disciplinas = Disciplinas.objects.all()
-    return render(request, 'aluno/professores.html', {'disciplinas' : disciplinas})
+    grupo_prof = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo_prof:
+        disciplinas = Disciplinas.objects.all()
+        return render(request, 'aluno/professores.html', {'disciplinas' : disciplinas})
+    else:
+        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
 
 @login_required(login_url='/login/')
 def professorSave(request):
     if request.method == 'POST':
-        if request.user.has_perm('add_professor'):
+        grupo_prof = Group.objects.get(id=4)
+        grupo_secret = Group.objects.get(id=3)
+        group_auth = request.user.groups.first()
+
+        if group_auth != grupo_prof and group_auth != grupo_secret:
             form = ProfessorForm(request.POST)
             if form.is_valid():
                 nome = form.cleaned_data['nome']
@@ -562,17 +671,27 @@ def professorSave(request):
         return redirect(reverse('professor'))
     
 @login_required(login_url='/login/')
-@permission_required('add_nota')
 def nota(request):
-    professores = Professores.objects.all()
-    alunos = Alunos.objects.all()
-    disciplinas = Disciplinas.objects.all()
-    return render(request, 'aluno/notas.html', {'professores' : professores, 'alunos' : alunos, 'disciplinas' : disciplinas})
+    grupo_prof = Group.objects.get(id=4)
+    grupo_admin = Group.objects.get(id=1)
+    group_auth = request.user.groups.first()
+
+    if group_auth == grupo_prof or group_auth == grupo_admin:
+        professores = Professores.objects.all()
+        alunos = Alunos.objects.all()
+        disciplinas = Disciplinas.objects.all()
+        return render(request, 'aluno/notas.html', {'professores' : professores, 'alunos' : alunos, 'disciplinas' : disciplinas})
+    else:
+        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
 
 @login_required(login_url='/login/')
 def notaSave(request):
     if request.method == 'POST':
-        if request.user.has_perm('add_nota'):
+        grupo_prof = Group.objects.get(id=4)
+        grupo_admin = Group.objects.get(id=1)
+        group_auth = request.user.groups.first()
+
+        if group_auth == grupo_prof or group_auth == grupo_admin:
             form = NotaForm(request.POST)
             alunos = request.POST['aluno']
             if form.is_valid():
@@ -600,28 +719,58 @@ def notaSave(request):
         return redirect(reverse('professor'))
     
 @login_required(login_url='/login/')
-@permission_required('view_pagamento')
 def financa(request):
-    pagos = Pagamentos.objects.all()
-    return render(request,'aluno/financa.html', {'pagos' : pagos})
+    grupo_prof = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo_prof:
+        pagos = Pagamentos.objects.all()
+        return render(request,'aluno/financa.html', {'pagos' : pagos})
+    else:
+        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
     
 @login_required(login_url='/login/')
-@permission_required('view_pagamento')
 def pagamentos(request):
-    totalpagos = Pagamentos.objects.aggregate(total = Sum('valor'))['total']
-    propinas = Pagamentos.objects.filter(tipo='Propina').aggregate(prop = Sum('valor'))['prop']
-    outros = Pagamentos.objects.exclude(tipo='Propina').aggregate(out = Sum('valor'))['out']
-    return render(request, 'aluno/dadosfina.html', 
-                  {
-                    'totalpagos' : totalpagos,
-                    'propinas' : propinas,
-                    'outros' : outros
-                  }
-                  )
+    grupo_prof = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo_prof:
+        totalpagos = Pagamentos.objects.aggregate(total = Sum('valor'))['total']
+        propinas = Pagamentos.objects.filter(tipo='Propina').aggregate(prop = Sum('valor'))['prop']
+        outros = Pagamentos.objects.exclude(tipo='Propina').aggregate(out = Sum('valor'))['out']
+        return render(request, 'aluno/dadosfina.html', 
+                    {
+                        'totalpagos' : totalpagos,
+                        'propinas' : propinas,
+                        'outros' : outros
+                    }
+                    )
+    else:
+        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
 
 @login_required(login_url='/login/')
-@permission_required('view_nota')
 def verNotas(request, id):
-    notas = Notas.objects.filter(aluno_id=id)
-    aluno = Alunos.objects.get(id=id)
-    return render(request, 'aluno/notas_aluno.html', {'notas' : notas, 'aluno' : aluno})
+    grupo_prof = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo_prof:
+        notas = Notas.objects.filter(aluno_id=id)
+        aluno = Alunos.objects.get(id=id)
+        return render(request, 'aluno/notas_aluno.html', {'notas' : notas, 'aluno' : aluno})
+    else:
+        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
+
+def verFuncionario(request, id):
+    usuario = Usuario.objects.get(id=id)
+    return render(request, 'aluno/funcionarios.html', {'usuario' : usuario})
+
+def proximoFuncionario(request, id):
+    valor = id+1
+    if Usuario.objects.filter(id=valor).exists():
+        usuario = Usuario.objects.get(id=valor)
+        return render(request, 'aluno/funcionarios.html', {'usuario' : usuario})
+    else:
+        usuario = Usuario.objects.get(id=id)
+        return render(request, 'aluno/funcionarios.html', {'usuario' : usuario})
+    
+"""OBS: password: louerna@05"""
