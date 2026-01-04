@@ -18,7 +18,10 @@
                     <button onclick="return confirm('Deseja Sair?')" 
                     style="height: 25px; width: 75px; display: flex; justify-content: space-evenly; align-items: center; border-radius: 5px;">
                         <li><a href="{% url 'logout' %}" style="color: black;">Logout</a></li></button>
+                        <li><a href="{% url 'meuperfil' %}" style="color: black;">Meu Perfil</a></li>
+                        {% if perms.view_movimento %}
                         <li><a href="{% url 'registro' %}">Sign Up</a></li>
+                        {% endif %}
                     {% else %}
                     <h2><li><a href="{% url 'login' %}">Login</a></li></h2>
                     {% endif %}

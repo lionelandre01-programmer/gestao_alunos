@@ -39,5 +39,9 @@ urlpatterns = [
     path('movifinas/', views.financa, name='financa'),
     path('vernotas/<int:id>', views.verNotas, name='vernotas'),
     path('verfuncionario/<int:id>', views.verFuncionario, name='funcionario'),
-    path('proximofuncionario/<int:id>', views.proximoFuncionario, name='proximo_funcionario')
+    path('proximofuncionario/<int:id>', views.proximoFuncionario, name='proximo_funcionario'),
+    path('anteriorfuncionario/<int:id>', views.anteriorFuncionario, name='anterior_funcionario'),
+    path('meuperfil/', views.meuperfil, name='meuperfil'),
+    path('abaRegistroEdite/<int:id>', views.abaRegistroEdite, name='abaRegistroEdite'),
+    path('registroEdite/<int:id>', views.registroEdite, name='registroEdite')
 ]

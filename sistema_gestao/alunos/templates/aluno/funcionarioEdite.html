@@ -1,0 +1,96 @@
+{% extends 'aluno/layout/base.html' %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        {% if 'error' in message.tags %}
+
+            <div style="width: 50%; height: auto; background-color: rgb(253, 27, 27); margin: 20px; border-radius: 10px; padding: 20px;">
+                <h1 style="text-align: center;">{{ message }}</h1>
+            </div>
+
+        {% elif 'success' in message.tags %}
+
+            <div style="width: 50%; height: auto; background-color: rgb(4, 250, 98); margin: 20px; border-radius: 10px; padding: 20px;">
+                <h1 style="text-align: center;">{{ message }}</h1>
+            </div>
+
+        {% else %}
+
+            <div style="width: 50%; height: auto; background-color: rgb(246, 250, 4); margin: 20px; border-radius: 10px; padding: 20px;">
+                <h1 style="text-align: center;">{{ message }}</h1>
+            </div>
+        
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+    {% if myself %}
+        <div class="page">
+            <h1 style="color: rgb(148, 114, 4);">ACTUALIZAR MEUS DADOS</h1>
+        </div>
+    {% else %}
+        <div class="page">
+            <h1 style="color: rgb(148, 114, 4);">ACTUALIZAR DADOS DO FUNCIONÁRIO</h1>
+        </div>
+    {% endif %}
+
+    <form action="{% url 'registroEdite' usuario.id %}" method="post" class="form" style="height: 110vh; gap: 10px;">
+        {% csrf_token %}
+
+        <label for="first_name">Nome:</label>
+        <input type="text" id="first_name" name="first_name" value="{{ usuario.first_name }}" required>
+
+        <label for="last_name">Sobrenome</label>
+        <input type="text" id="last_name" name="last_name" value="{{ usuario.last_name }}" required>
+        
+        <label for="username">Nome De Usuário</label>
+        <input type="text" name="username" id="username" value="{{ usuario.username }}" required>
+        
+        <label for="email">E-Mail</label>
+        <input type="email" name="email" id="email" value="{{ usuario.email }}" required>
+        
+        {% if admin and myself %}
+            <label for="superuser">É Super Usuário?</label>
+            <select name="superuser" id="grupo" class="genero">
+                <option value="0">Não Sou um Super Usuário</option>
+                <option value="1">Sim, Sou um Super Usuário</option>
+            </select>
+        {% elif myself %}
+            <label for="superuser">É Super Usuário?</label>
+            <input type="number" name="superuser" value="{{ usuario.is_superuser }}" readonly>
+        {% elif admin %}
+            <label for="superuser">É Super Usuário?</label>
+            <select name="superuser" id="grupo" class="genero">
+                <option value="{{ usuario.is_superuser }}">Actualmente: {{ usuario.is_superuser }}</option>
+                <option value="0">Não É um Super Usuário</option>
+                <option value="1">Sim, É um Super Usuário</option>
+            </select>
+        {% else %}
+            <input type="hidden" name="superuser" value="{{ usuario.is_superuser }}" readonly>
+        {% endif %}
+
+        {% if myself %}
+
+            <label for="password0">Insira a sua Palavra-Passe</label>
+            <input type="password" name="password0" id="password0" placeholder="Insira novamente a palavra-passe" required>
+
+            <label for="password1">Nova Palavra-Passe</label>
+            <input type="password" name="password1" id="password1" placeholder="defina uma palavra-passe com mínimo de 8 dígitos" required>
+
+            <label for="password2">Confirme a Nova Palavra-Passe</label>
+            <input type="password" name="password2" id="password2" placeholder="Insira novamente a palavra-passe" required>
+                
+        {% endif %}
+
+        <div class="btn-edite">
+            <button type="submit" id="btn-actua" style="background: yellow;">Actualizar</button>
+            <button id="btn-actua" style="background: gainsboro;">
+                <a href="{% url 'index' %}" style="color: black;">Voltar</a>
+            </button>
+        </div>
+
+    </form>
+
+{% endblock %}

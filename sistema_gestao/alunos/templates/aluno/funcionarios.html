@@ -4,6 +4,19 @@
 
 {% load static %}
 
+    <form action="{% url 'funcionario' 1 %}" method="POST" style="width: 12%; height: 15%; border-radius: 10px; 
+    position: absolute; left: 280px; top: 300px; border: 1px solid black; display: flex; flex-direction: column; 
+    gap: 10px; padding: 10px 0; background-color: rgb(0, 162, 255);">
+
+        {% csrf_token %}
+        <div style="height: 40%; margin-bottom: 15px;">
+            <label for="cod">Código:</label>
+            <input type="number" id="cod" name="id" style="height: 100%;" required>
+        </div>
+        
+        <button type="submit" style="width: 86%; height: 30%; background-color: aqua;">Buscar</button>
+    </form>
+
     <div class="page" style="margin-top: 20px;">
         <h1 style="color: rgb(148, 114, 4);">INFORMAÇÕES DO FUNCIONÁRIO</h1>
     </div>
@@ -22,12 +35,17 @@
         </div>
 
         <div style="height: 6vh; display: flex; width: 100%; gap: 20px;">
-            <button style="background: gainsboro; width: 40%; height: 100%;
+            <button style="background: gainsboro; width: 30%; height: 100%;
             border: 2px solid aliceblue; border-radius: 10px; background: rgb(0, 162, 255);">
-                <a href="{% url 'index' %}" style="color: black;">Voltar</a>
+                <a href="{% url 'anterior_funcionario' usuario.id %}" style="color: black;">Anterior</a>
             </button>
 
-            <button style="background: gainsboro; width: 40%; height: 100%;
+            <button style="background: gainsboro; width: 30%; height: 100%;
+            border: 2px solid aliceblue; border-radius: 10px; background: rgb(0, 162, 255);">
+                <a href="{% url 'abaRegistroEdite' usuario.id %}" style="color: black;">Editar</a>
+            </button>
+
+            <button style="background: gainsboro; width: 30%; height: 100%;
             border: 2px solid aliceblue; border-radius: 10px; background: rgb(0, 162, 255);">
                 <a href="{% url 'proximo_funcionario' usuario.id %}" style="color: black;">Próximo</a>
             </button>

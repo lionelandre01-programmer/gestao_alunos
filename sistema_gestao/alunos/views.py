@@ -15,6 +15,7 @@ from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Group
+from django.contrib.auth.hashers import make_password, check_password
 
 # Create your views here.
 def index(request):
@@ -198,7 +199,6 @@ def delete(request, id):
 
 """Realizar busca de aluno pelo id ou nome"""
 @login_required(login_url='/login/')
-@permission_required('view_aluno')
 def abaBusca(request):
     return render(request,'aluno/busca.html')
 
@@ -761,16 +761,172 @@ def verNotas(request, id):
         return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
 
 def verFuncionario(request, id):
-    usuario = Usuario.objects.get(id=id)
-    return render(request, 'aluno/funcionarios.html', {'usuario' : usuario})
-
-def proximoFuncionario(request, id):
-    valor = id+1
-    if Usuario.objects.filter(id=valor).exists():
-        usuario = Usuario.objects.get(id=valor)
-        return render(request, 'aluno/funcionarios.html', {'usuario' : usuario})
+    if request.method == 'POST':
+        codigo = int(request.POST.get('id'))
+        if Usuario.objects.filter(id=codigo).exists():
+            usuario = Usuario.objects.get(id=codigo)
+            return render(request, 'aluno/funcionarios.html', {'usuario' : usuario})
+        else:
+            return render(request, 'aluno/funcionarios.html', {'usuario' : usuario})
     else:
         usuario = Usuario.objects.get(id=id)
         return render(request, 'aluno/funcionarios.html', {'usuario' : usuario})
+
+def proximoFuncionario(request, id):
+    grupo_prof = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+
+    if group_auth != grupo_prof:
+        valor = id+1
+        if Usuario.objects.filter(id=valor).exists():
+            usuario = Usuario.objects.get(id=valor)
+            return render(request, 'aluno/funcionarios.html', {'usuario' : usuario})
+        else:
+            usuario = Usuario.objects.get(id=id)
+            return render(request, 'aluno/funcionarios.html', {'usuario' : usuario})
+    else:
+        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
+    
+def anteriorFuncionario(request, id):
+    grupo_prof = Group.objects.get(id=4)
+    group_auth = request.user.groups.first()
+    
+    if group_auth != grupo_prof:
+        valor = id-1
+        if Usuario.objects.filter(id=valor).exists():
+            usuario = Usuario.objects.get(id=valor)
+            return render(request, 'aluno/funcionarios.html', {'usuario' : usuario})
+        else:
+            usuario = Usuario.objects.get(id=id)
+            return render(request, 'aluno/funcionarios.html', {'usuario' : usuario})
+    else:
+        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
+    
+def meuperfil(request):
+    usuario = Usuario.objects.get(id=request.user.id)
+    grupo_admin = Group.objects.get(id=1)
+    grupo_gest = Group.objects.get(id=2)
+    grupo_secret = Group.objects.get(id=3)
+
+    if request.user.groups.first() == grupo_admin:
+        funcao = 'Administrador(a)'
+    
+    elif request.user.groups.first() == grupo_gest:
+        funcao = 'Gestor(a)'
+
+    elif request.user.groups.first() == grupo_secret:
+        funcao = 'Secretário(a)'
+
+    else:
+        funcao = 'Professor(a)'
+
+    return render(request, 'aluno/meuperfil.html', {'usuario' : usuario, 'funcao' : funcao})
+
+def abaRegistroEdite(request, id):
+    grupo_admin = Group.objects.get(id=1)
+    usuario = Usuario.objects.get(id=id)
+    grupos = Group.objects.all()
+    if request.user == usuario and request.user.groups.first() == grupo_admin:
+        myself = True
+        admin = True
+    
+    elif request.user == usuario:
+        myself = True
+        admin = False
+
+    elif request.user.groups.first() == grupo_admin:
+        admin = True
+        myself = False
+
+    else:
+        admin = False
+        myself = False
+
+    return render(request, 'aluno/funcionarioEdite.html', {'usuario' : usuario, 'myself' : myself, 'admin' : admin, 'grupos' : grupos})
+
+def registroEdite(request, id):
+    grupo_admin = Group.objects.get(id=1)
+    grupo_gest = Group.objects.get(id=2)
+    if request.user.id == id and (request.user.groups.first() == grupo_admin or request.user.groups.first() == grupo_gest):
+        myself = True
+        admin = True
+        gest = True
+    
+    elif request.user.id == id:
+        myself = True
+        admin = False
+        gest = False
+
+    elif request.user.groups.first() == grupo_admin or request.user.groups.first() == grupo_gest:
+        admin = True
+        gest = True
+        myself = False
+
+    else:
+        admin = False
+        myself = False
+        gest = False
+
+    if request.method == 'POST':
+        if myself and (admin or gest):
+            usuario = Usuario.objects.get(id=id)
+            usuario.first_name = request.POST.get('first_name')
+            usuario.last_name = request.POST.get('last_name')
+            usuario.username = request.POST.get('username')
+            usuario.email = request.POST.get('email')
+            usuario.is_superuser = request.POST.get('superuser')
+            if check_password(request.POST.get('password0'), usuario.password):
+                if request.POST.get('password1') == request.POST.get('password2'):
+                    usuario.password = make_password(request.POST.get('password1'))
+                else:
+                    messages.error(request, 'A nova palavra-passe e a confirmação precisam ser iguais!')
+                    usuario = Usuario.objects.get(id=id)
+                    return redirect(reverse('abaRegistroEdite', args=[usuario.id]))
+            else:
+                messages.error(request, 'Plavra-passe incorrecta!')
+                usuario = Usuario.objects.get(id=id)
+                return redirect(reverse('abaRegistroEdite', args=[usuario.id]))
+            usuario.save()
+            messages.success(request, 'Dados actualizados com sucesso!')
+            return redirect(reverse('index'))
+        
+        elif myself:
+            usuario = Usuario.objects.get(id=id)
+            usuario.first_name = request.POST.get('first_name')
+            usuario.last_name = request.POST.get('last_name')
+            usuario.username = request.POST.get('username')
+            usuario.email = request.POST.get('email')
+            if check_password(request.POST.get('password0'), usuario.password):
+                if request.POST.get('password1') == request.POST.get('password2'):
+                    usuario.password = make_password(request.POST.get('password1'))
+                else:
+                    messages.error(request, 'A nova palavra-passe e a confirmação precisam ser iguais!')
+                    usuario = Usuario.objects.get(id=id)
+                    return redirect(reverse('abaRegistroEdite', args=[usuario.id]))
+            else:
+                messages.error(request, 'Palavra-passe incorrecta!')
+                usuario = Usuario.objects.get(id=id)
+                return redirect(reverse('abaRegistroEdite', args=[usuario.id]))
+            usuario.save()
+            messages.success(request, 'Dados actualizados com sucesso!')
+            return redirect(reverse('index'))
+        
+        else:
+            Usuario.objects.filter(id=id).update(
+            first_name = request.POST.get('first_name'),
+            last_name = request.POST.get('last_name'),
+            username = request.POST.get('username'),
+            email = request.POST.get('email'),
+            nome = request.POST.get('first_name') +' '+ request.POST.get('last_name'),
+            is_superuser = bool(request.POST.get('superuser'))
+            )
+            messages.success(request, 'Dados actualizados com sucesso!')
+            return redirect(reverse('index'))
+    
+    else:
+        usuario = Usuario.objects.get(id=id)
+        return redirect(reverse('abaRegistroEdite', args=[usuario.id]))
+
     
 """OBS: password: louerna@05"""
+"""OBS: password-Admin: lionel@01"""

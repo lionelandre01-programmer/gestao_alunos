@@ -342,6 +342,14 @@ th{
     color: goldenrod;
 }
 
+#informa h2 span{
+    color: rgb(3, 47, 86);
+}
+
+#informa h2{
+    color: black;
+}
+
 .div-busca{
     width: 85%;
     height: 60%;
