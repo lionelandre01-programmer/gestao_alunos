@@ -19,7 +19,7 @@
                     style="height: 25px; width: 75px; display: flex; justify-content: space-evenly; align-items: center; border-radius: 5px;">
                         <li><a href="{% url 'logout' %}" style="color: black;">Logout</a></li></button>
                         <li><a href="{% url 'meuperfil' %}" style="color: black;">Meu Perfil</a></li>
-                        {% if perms.view_movimento %}
+                        {% if request.user.is_superuser %}
                         <li><a href="{% url 'registro' %}">Sign Up</a></li>
                         {% endif %}
                     {% else %}

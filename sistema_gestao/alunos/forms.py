@@ -237,11 +237,11 @@ class DisciplinaForm(forms.ModelForm):
 class ProfessorForm(forms.ModelForm):
     class Meta:
         model = Professores
-        fields = ('nome','sobrenome','disciplina','tempo_trabalho')
+        fields = ('first_name','last_name', 'username','disciplina','tempo_trabalho')
 
         widgets = {
-            'nome' : forms.TextInput(attrs={'placeholder':'Seu nome'}),
-            'sobrenome' : forms.TextInput(attrs={'placeholder':'Seu sobrenome'}),
+            'first_name' : forms.TextInput(attrs={'placeholder':'Seu nome'}),
+            'last_name' : forms.TextInput(attrs={'placeholder':'Seu sobrenome'}),
             'disciplina' : forms.TextInput(attrs={'placeholder':'Disciplina que leciona'}),
             'tempo_trabalho' : forms.DateInput(attrs={'class':'genero'})
         }

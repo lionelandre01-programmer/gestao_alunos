@@ -8,27 +8,42 @@
         <h2 style="color: rgb(148, 114, 4);">NOTAS CURRICULAR DO ESTUDANTE</h2>
     </div>
 
-    <div class="detalhes" style="height: auto;">
+    <div class="detalhes_notas">
         <div class="foto">
-            <img src="{% static 'css/img/alunos.png' %}" alt="erro" class="passe">
+            <img src="{% static 'css/img/alunos.jpg' %}" alt="erro" class="passe">
+        </div>
+        <div class="info">
+            <h4>Nome: <span>{{ aluno.nome }}</span></h4>
+            <h4>Gênero: <span>{{ aluno.genero }}</span></h4>
+            <h4>Classe: <span>{{ aluno.classe }}ª</span></h4>
+            <h4>Sala: <span>{{ aluno.sala }}</span></h4>
+            <h4>Turno: <span>{{ aluno.turno }}</span></h4>
+            <h4>Curso: <span>{{ aluno.curso }}</span></h4>
+            <h4>Data De Nascimento: <span>{{ aluno.data_nascimento | date:'d/m/Y'}}</span></h4>
+            <h4>Data De Inscrição: <span>{{ aluno.matricula | date:'d/m/Y h:i'}}</span></h4>
         </div>
 
         <div class="informa" style="height: auto;">
-            <h1>ALUNO: {{ aluno.nome }}</h1>
-
-                {% for nota in notas %}
-                    <div style="height: auto; border: 1px solid black; margin: 10px;
-                     border-radius: 10px; background-color: black; padding: 5px;">
-                        <ul>
-                            <li><span>Disciplina:</span> {{ nota.disciplina }}</li>
-                            <li><span>Trimestre:</span> {{ nota.trimestre }}</li>
-                            <li><span>Prova:</span> {{ nota.prova }}</li>
-                            <li><span>Nota:</span> {{ nota.nota }} Valor(es)</li>
-                        </ul>
-                    </div>
-
-                {% endfor %}
                 
+            <table border="1" style="border-radius: 10px; overflow: hidden;">
+                <tr>
+                    <th  style="background-color: aliceblue; color: black;">Trimestre</th>
+                    <th  style="background-color: aliceblue; color: black;">Prova</th>
+                    <th  style="background-color: aliceblue; color: black;">Disciplina</th>
+                    <th  style="background-color: aliceblue; color: black;">Nota</th>
+                </tr>
+                {% for nota in notas %}
+                    <tr>
+                            
+                        <td style="background-color: aliceblue; color: black;">{{ nota.trimestre }} Trimestre</td>
+                        <td style="background-color: aliceblue; color: black;">{{ nota.prova }}</td>
+                        <td style="background-color: aliceblue; color: black;">{{ nota.disciplina }}</td>
+                        <td style="background-color: aliceblue; color: black;">{{ nota.nota }} Valor(es)</td>
+
+                    </tr>
+                {% endfor %}
+            </table>
+
         </div>
 
         <div style="display: flex; justify-content: space-evenly; height: 10vh; width: 100%;">

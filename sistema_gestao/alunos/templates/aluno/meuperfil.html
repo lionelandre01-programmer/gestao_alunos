@@ -26,15 +26,21 @@
         </div>
 
         <div style="height: 6vh; display: flex; width: 100%; gap: 20px;">
-            <button style="background: gainsboro; width: 40%; height: 100%;
+            <button style="background: gainsboro; width: 30%; height: 100%;
             border: 2px solid aliceblue; border-radius: 10px; background: rgb(0, 162, 255);">
                 <a href="{% url 'index' %}" style="color: black;">Voltar</a>
             </button>
 
-            <button style="background: gainsboro; width: 40%; height: 100%;
+            <button style="background: gainsboro; width: 30%; height: 100%;
             border: 2px solid aliceblue; border-radius: 10px; background: rgb(0, 162, 255);">
                 <a href="{% url 'abaRegistroEdite' usuario.id %}" style="color: black;">Editar</a>
             </button>
+            {% if funcao != 'Secretário(a)' %}
+                <button style="background: gainsboro; width: 30%; height: 100%;
+                    border: 2px solid aliceblue; border-radius: 10px; background: rgb(0, 162, 255);">
+                    <a href="{% url 'mini_pauta' %}" style="color: black;">Mini-Pauta</a>
+                </button>
+            {% endif %}
         </div>
     </div>
 

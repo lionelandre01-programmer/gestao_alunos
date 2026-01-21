@@ -21,12 +21,13 @@
         <h1 style="color: rgb(148, 114, 4);">INFORMAÇÕES DO FUNCIONÁRIO</h1>
     </div>
 
-    <div class="detalhes">
+    <div class="detalhes" id="changes">
         <div class="foto">
             <img src="{% static 'css/img/Passe.png' %}" alt="erro" class="passe">
         </div>
 
         <div class="informa">
+            <h4>Código: <span>{{ usuario.id }}</span></h4>
             <h4>Nome: <span>{{ usuario.nome }}</span></h4>
             <h4>Nome de Usuário: <span>{{ usuario.username }}</span></h4>
             <h4>E-Mail: <span>{{ usuario.email }}</span></h4>

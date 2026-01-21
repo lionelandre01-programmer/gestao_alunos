@@ -252,7 +252,7 @@ def propina(request, id):
     if group_auth != grupo_prof:
         aluno = Alunos.objects.get(id=id)
         ultimo = Propinas.objects.filter(aluno = aluno).order_by('-id').first()
-        mensal = Mensalidade.objects.get(curso_id=aluno.curso_id, classe=aluno.classe)
+        mensal = Mensalidade.objects.filter(curso_id=aluno.curso_id, classe=aluno.classe).first()
         mensali = mensal
         return render(request, 'aluno/propina.html', {'aluno' : aluno, 'ultimo' : ultimo, 'mensali' : mensali})
         
@@ -927,6 +927,167 @@ def registroEdite(request, id):
         usuario = Usuario.objects.get(id=id)
         return redirect(reverse('abaRegistroEdite', args=[usuario.id]))
 
+def mini_pauta(request):
+    grupo_secret = Group.objects.get(id=3)
+    grupo_prof = Group.objects.get(id=4)
+    cursos = Cursos.objects.all()
+
+    if request.user.groups.first() != grupo_secret:
+        professor = False
+        if request.user.groups.first() == grupo_prof:
+            id = request.user.id
+            professor = Professores.objects.get(id=id)
+
+        if professor:
+            if Notas.objects.filter(professor=professor).exists():
+                notas = Notas.objects.filter(professor=professor).all()
+            
+        else:
+            notas = Notas.objects.all()
+
+        return render(request, 'aluno/minipauta.html', {'notas':notas, 'cursos':cursos})
+    
+    else:
+        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
+    
+def mini_pautaBusca(request):
+    grupo_secret = Group.objects.get(id=3)
+    grupo_prof = Group.objects.get(id=4)
+
+    if request.user.groups.first() != grupo_secret:
+        if request.method == 'POST':
+            turma = request.POST.get('turma')
+            classe = int(request.POST.get('classe'))
+            turno = request.POST.get('turno')
+            id_curso = int(request.POST.get('curso'))
+            curso = Cursos.objects.get(id=id_curso)
+            turmabool = bool(turma)
+            turnobool = bool(turno)
+            classebool = bool(classe)
+            usuario = False
+
+            if request.user.groups.first() == grupo_prof:
+                id = request.user.id
+                usuario = Professores.objects.get(id=id)
+
+            if turmabool and turnobool and classebool and curso:
+                if usuario:
+                    notas = Notas.objects.filter(professor=usuario, aluno__turma=turma, aluno__turno=turno, aluno__classe=classe, aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+
+                else:
+                    notas = Notas.objects.filter(aluno__turma=turma, aluno__turno=turno, aluno__classe=classe, aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+
+                dado_todos = dado
+                return render(request,'aluno/minipauta.html', {'notas':notas, 'dado_todos':dado_todos})
+
+            elif turmabool and classebool and curso:
+                if usuario:
+                    notas = Notas.objects.filter(professor=usuario, aluno__turma=turma, aluno__classe=classe, aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+                
+                else:
+                    notas = Notas.objects.filter(aluno__turma=turma, aluno__classe=classe, aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+                dado_classe = dado.classe
+                dado_turma = dado.turma
+                dado_curso = dado.curso
+                return render(request,'aluno/minipauta.html', {'notas':notas, 'dado_classe':dado_classe, 'dado_turma':dado_turma, 'dado_curso':dado_curso})
+
+            elif turmabool and turnobool and curso:
+                if usuario:
+                    notas = Notas.objects.filter(professor=usuario, aluno__turma=turma, aluno__turno=turno, aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+                
+                else:
+                    notas = Notas.objects.filter(aluno__turma=turma, aluno__turno=turno, aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+                dado_turma = dado.turma
+                dado_turno = dado.turno
+                dado_curso = dado.curso
+                return render(request,'aluno/minipauta.html', {'notas':notas, 'dado_turma':dado_turma, 'dado_turno':dado_turno, 'dado_curso':dado_curso})
+
+            elif classebool and turnobool and curso:
+                if usuario:
+                    notas = Notas.objects.filter(professor=usuario, aluno__turno=turno, aluno__classe=classe, aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+                
+                else:
+                    notas = Notas.objects.filter(aluno__turno=turno, aluno__classe=classe, aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+                dado_classe = dado.classe
+                dado_turno = dado.turno
+                dado_curso = dado.curso
+                return render(request,'aluno/minipauta.html', {'notas':notas, 'dado_classe':dado_classe, 'dado_turno':dado_turno, 'dado_curso':dado_curso})
+
+            elif turmabool and curso:
+                if usuario:
+                    notas = Notas.objects.filter(professor=usuario, aluno__turma=turma, aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+                
+                else:
+                    notas = Notas.objects.filter(aluno__turma=turma, aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+                dado_turma = dado.turma
+                dado_curso = dado.curso
+                return render(request,'aluno/minipauta.html', {'notas':notas, 'dado_turma':dado_turma, 'dado_curso':dado_curso})
+            
+            elif classebool and curso:
+                if usuario:
+                    notas = Notas.objects.filter(professor=usuario, aluno__classe=classe, aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+                
+                else:
+                    notas = Notas.objects.filter(aluno__classe=classe, aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+                dado_classe = dado.classe
+                dado_curso = dado.curso
+                return render(request,'aluno/minipauta.html', {'notas':notas, 'dado_classe':dado_classe, 'dado_curso':dado_curso})
+
+            elif turnobool and curso:
+                if usuario:
+                    notas = Notas.objects.filter(professor=usuario, aluno__turno=turno, aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+                
+                else:
+                    notas = Notas.objects.filter(aluno__turno=turno, aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+                dado_turno = dado.turno
+                dado_curso = dado.curso
+                return render(request,'aluno/minipauta.html', {'notas':notas, 'dado_turno':dado_turno, 'dado_curso':dado_curso})
+
+            else:
+                if usuario:
+                    notas = Notas.objects.filter(professor=usuario, aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+                
+                else:
+                    notas = Notas.objects.filter(aluno__curso=curso).all()
+                    dado_aluno = notas.values_list('aluno_id', flat=True).first()
+                    dado = Alunos.objects.get(id=dado_aluno)
+                dado_curso = dado.curso
+                return render(request,'aluno/minipauta.html', {'notas':notas, 'dado_curso':dado_curso})
+        else:
+            return redirect(reverse('mini_pauta'))
+    
+    else:
+        return HttpResponseForbidden('<h1>Apenas Funcionários Autorizados Podem prosseguir na Execução de Tal Acção</h1>')
     
 """OBS: password: louerna@05"""
 """OBS: password-Admin: lionel@01"""

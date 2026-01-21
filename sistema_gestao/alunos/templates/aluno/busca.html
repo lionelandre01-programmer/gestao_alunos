@@ -34,7 +34,10 @@
         <h1 style="color: rgb(148, 114, 4);">INFORMAÇÕES DO ALUNO</h1>
     </div>
 
-    <div class="detalhes">
+    <div class="detalhes" id="changes">
+        <h2 style="text-align: start; width: 99%;">
+            <a href="{% url 'abaBusca' %}" style="color: black; text-align: start; border: 3px solid black; border-radius: 10%; padding: 10px;">◀ --</a>
+        </h2>
         <div class="foto">
             <img src="{% static 'css/img/alunos.jpg' %}" alt="erro" class="passe">
         </div>
@@ -74,13 +77,13 @@
 
         {% csrf_token %}
         <div style="width: 25%; height: 100%; display: flex; flex-direction: column; gap: 25px;">
-            <label for="buscaId">Id do Aluno:</label>
-            <label for="buscaNome">Nome do Aluno:</label>  
+            <label for="buscaId">ID DO ALUNO:</label>
+            <label for="buscaNome">NOME DO ALUNO:</label>  
         </div>
 
         <div style="width: 40%; height: 100%; display: flex; flex-direction: column; gap: 10px;">
-            <input type="text" name="buscaId" placeholder="Informe o Id" style="height: 30px; border-radius: 5px;">
-            <input type="text" name="buscaNome" placeholder="Informe o Nome" style="height: 30px; border-radius: 5px;">
+            <input type="text" name="buscaId" placeholder="Informe o Id" style="height: 30px; border-radius: 5px;" id="change_input">
+            <input type="text" name="buscaNome" placeholder="Informe o Nome" style="height: 30px; border-radius: 5px;" id="change_input">
         </div>
         
         <button type="submit" style="width: 30%; height: 70px; background: rgb(0, 132, 255); 

@@ -43,5 +43,7 @@ urlpatterns = [
     path('anteriorfuncionario/<int:id>', views.anteriorFuncionario, name='anterior_funcionario'),
     path('meuperfil/', views.meuperfil, name='meuperfil'),
     path('abaRegistroEdite/<int:id>', views.abaRegistroEdite, name='abaRegistroEdite'),
-    path('registroEdite/<int:id>', views.registroEdite, name='registroEdite')
+    path('registroEdite/<int:id>', views.registroEdite, name='registroEdite'),
+    path('minipauta/', views.mini_pauta, name='mini_pauta'),
+    path('minibusca/', views.mini_pautaBusca, name='minipautaBusca')
 ]

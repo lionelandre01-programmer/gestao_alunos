@@ -91,6 +91,11 @@ aside{
     height: 10%;
     border-radius: 5px;
     background: transparent;
+    transition: all 0.5s ease-in-out;
+}
+
+.aside-lista button:hover{
+    background-color: aqua;
 }
 
 table{
@@ -127,6 +132,30 @@ th{
     border-radius: 15px;
     color: aliceblue;
     margin-bottom: 10px;
+    transition: all 2.5s ease;
+}
+
+.form:hover{
+    cursor: pointer;
+    background-color: rgb(0, 140, 255);
+}
+
+#changes{
+    transition: all 2.5s ease;
+}
+
+#changes:hover{
+    border: 2px solid rgb(156, 3, 3);
+    background-color: rgba(18, 19, 18, 0.87);
+}
+
+#change_input{
+    transition: all 2s ease-in-out;
+}
+
+#change_input:hover{
+    background-color: black;
+    color: white;
 }
 
 .indexe{
@@ -140,9 +169,20 @@ th{
     overflow: hidden;
 }
 
-.form input{
+.form input, select{
     width: 95%;
-    height: 85%;
+    height: 95%;
+    transition: all 0.5s ease-in-out;
+}
+
+.form input:hover{
+    background-color: black;
+    color: white;
+}
+
+.form select:hover{
+    background-color: black;
+    color: white;
 }
 
 .genero{
@@ -427,4 +467,69 @@ th{
     padding: 15px 5px;
     border-radius: 5px;
     text-align: center;
+}
+
+.detalhes_notas{
+    width: 70%;
+    height: 90vh;
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 3%;
+    border: 2px solid skyblue ;
+    border-radius: 15px;
+    margin-bottom: 10px;
+}
+
+.detalhes_notas .foto{
+    width: 30%;
+    height: 35%;
+    border-radius: 1px;
+}
+
+.detalhes_notas .info{
+    width: 70%;
+    height: 35%;
+    padding: 10px;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+    background-color: rgb(0, 213, 255);
+}
+
+.detalhes_notas .informa{
+    width: 100%;
+    height: auto;
+    color: aliceblue;
+}
+
+.detalhes_notas .informa table{
+    border-collapse: collapse;
+    width: 100%;
+    color: aliceblue;
+    height: auto;
+}
+
+.formMiniBusca{
+    width: 85%;
+    height: 12vh;
+    top: 15vh;
+    right: 0;
+    background-color: aqua;
+    position: absolute;
+    padding: 8px 2px;
+}
+
+.formMiniBusca select{
+    width: 20%;
+    height: 40%;
+}
+
+.formMiniBusca input{
+    height: 50%;
+    width: 46%;
+    margin-left: 45px;
+    margin-top: 10px;
+    background-color: rgb(0, 153, 255);
 }
